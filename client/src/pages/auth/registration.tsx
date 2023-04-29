@@ -1,11 +1,12 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import AuthWihtGoogle from "@/components/AuthWithGoogleButton";
 import Head from "next/head";
 import { BiShowAlt, BiHide } from "react-icons/bi";
 import Link from "next/link";
 import AppRoutes from "@/AppRoutes";
-import { StringLiteral } from "typescript";
 import { useForm } from "react-hook-form";
+import { getAuth } from "firebase/auth";
+import { useRouter } from "next/router";
 
 interface RegistrationInputs {
   firstName: string;
@@ -16,9 +17,15 @@ interface RegistrationInputs {
 }
 
 const Registration = () => {
+  const auth = getAuth();
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState<boolean>(false);
-
-  const { register, handleSubmit } = useForm<RegistrationInputs>();
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<RegistrationInputs>();
 
   const onChangeVisiblyPassword = useCallback(() => {
     setShowPassword((prev) => !prev);
@@ -26,6 +33,13 @@ const Registration = () => {
 
   const onSubmit = handleSubmit((data) => {
     console.log(data);
+    if (data.password === data.repPasword) {
+      router.replace(AppRoutes.home);
+    }
+    setError("password", {
+      type: "custom",
+      message: "do not match",
+    });
   });
 
   return (
@@ -34,48 +48,114 @@ const Registration = () => {
         <title>Registration</title>
       </Head>
       <div className="w-full h-screen flex bg-gradient-to-r from-indigo-500 from-20% via-sky-500 via-50% to-emerald-500 to-90%">
-        <div className="m-auto bg-white p-3 rounded-sm">
-          <form className="flex flex-col mb-5" onSubmit={onSubmit}>
+        <div className="m-auto bg-white rounded-sm p-3">
+          <form className="w-72 flex flex-col mb-5 m-3" onSubmit={onSubmit}>
             <div className="text-2xl text-center mb-5">Registration</div>
-            <label htmlFor="f-name" className="flex flex-col border-b mb-5">
-              First name:
+            <label
+              htmlFor="f-name"
+              className={`flex flex-col border-b ${
+                errors.firstName && errors.firstName.type
+                  ? "border-red-600"
+                  : ""
+              } mb-5`}
+            >
+              <div className="flex">
+                First name:{" "}
+                {errors.firstName && errors.firstName.type && (
+                  <div className="px-1 flex text-red-600">
+                    {errors.firstName.message}
+                  </div>
+                )}
+              </div>
               <input
                 type="text"
                 id="f-name"
-                className=" py-1 px-2 text-xl outline-none"
+                className=" py-1 px-2 outline-none"
                 placeholder="Margot"
-                {...register("firstName", { required: true })}
+                {...register("firstName", {
+                  required: { value: true, message: "required" },
+                  minLength: {
+                    value: 2,
+                    message: "len more 2",
+                  },
+                })}
               />
             </label>
-            <label htmlFor="l-name" className="flex flex-col border-b mb-5">
-              Last name:
+            <label
+              htmlFor="l-name"
+              className={`flex flex-col border-b  mb-5 ${
+                errors.lastName && errors.lastName.type ? "border-red-600" : ""
+              }`}
+            >
+              <div className="flex">
+                Last name:
+                {errors.lastName && errors.lastName.type && (
+                  <div className="mx-1 text-red-500">
+                    {errors.lastName.message}
+                  </div>
+                )}
+              </div>
               <input
                 type="text"
                 id="l-name"
-                className=" py-1 px-2 text-xl outline-none"
+                className=" py-1 px-2 outline-none"
                 placeholder="Robbie"
-                {...register("lastName", { required: true })}
+                {...register("lastName", {
+                  required: { value: true, message: "required" },
+                  minLength: {
+                    value: 2,
+                    message: "len more 2",
+                  },
+                })}
               />
             </label>
-            <label htmlFor="email" className="flex flex-col border-b mb-5">
-              Email:
+            <label
+              htmlFor="email"
+              className={`flex flex-col border-b mb-5 ${
+                errors.email && errors.email.type ? "border-red-600" : ""
+              }`}
+            >
+              <div className="flex">
+                Email:
+                {errors.email && errors.email.type && (
+                  <div className="mx-1 text-red-500">
+                    {errors.email.message}
+                  </div>
+                )}
+              </div>
               <input
                 type="email"
                 id="email"
-                className=" py-1 px-2 text-xl outline-none"
+                className=" py-1 px-2 outline-none"
                 placeholder="example@mail.com"
-                {...register("email", { required: true })}
+                {...register("email", {
+                  required: { value: true, message: "required" },
+                })}
               />
             </label>
-            <label htmlFor="password" className="flex flex-col border-b mb-5">
-              Password:
-              <div>
+            <label
+              htmlFor="password"
+              className={`flex flex-col border-b mb-5 ${
+                errors.lastName && errors.lastName.type ? "border-red-600" : ""
+              }`}
+            >
+              <div className="flex">
+                Password:
+                {errors.password && errors.password.type && (
+                  <div className="mx-1 text-red-500">
+                    {errors.password.message}
+                  </div>
+                )}
+              </div>
+              <div className="flex justify-between">
                 <input
                   type={showPassword ? "text" : "password"}
                   id="password"
-                  className=" py-1 px-2 text-xl outline-none"
+                  className=" py-1 px-2 outline-none"
                   placeholder="password"
-                  {...register("password", { required: true })}
+                  {...register("password", {
+                    required: { value: true, message: "required" },
+                  })}
                 />
                 <button
                   onClick={onChangeVisiblyPassword}
@@ -88,16 +168,27 @@ const Registration = () => {
             </label>
             <label
               htmlFor="rep-password"
-              className="flex flex-col border-b mb-5"
+              className={`flex flex-col border-b mb-5 ${
+                errors.lastName && errors.lastName.type ? "border-red-600" : ""
+              }`}
             >
-              Repeat password:
-              <div>
+              <div className="flex">
+                Rep password:
+                {errors.password && errors.password.type && (
+                  <div className="mx-1 text-red-500">
+                    {errors.password.message}
+                  </div>
+                )}
+              </div>
+              <div className="flex justify-between">
                 <input
                   type={showPassword ? "text" : "password"}
                   id="rep-password"
-                  className=" py-1 px-2 text-xl outline-none"
+                  className=" py-1 px-2 outline-none"
                   placeholder="Repeat password"
-                  {...register("repPasword", { required: true })}
+                  {...register("repPasword", {
+                    required: { value: true, message: "required" },
+                  })}
                 />
                 <button
                   onClick={onChangeVisiblyPassword}
@@ -135,6 +226,7 @@ const Registration = () => {
 };
 
 export default Registration;
+
 /*
 import {
   getAuth,
