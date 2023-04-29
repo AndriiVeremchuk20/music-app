@@ -1,8 +1,15 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
+import React from "react";
 
-const inter = Inter({ subsets: ['latin'] })
+const Home: React.FC = () => {
+  return (
+    <div className="w-full min-h-screen max-h-auto bg-slate-400">
+      <div>
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deserunt dicta
+        nihil deleniti, repudiandae ratione eum quam alias ut nemo odit saepe.
+        Maxime pariatur neque corrupti non. Maiores rerum amet quos!
+      </div>
+    </div>
+  );
+};
 
-export default function Home() {
-  return (<div>Hello user</div>)
-}
+export default Home;
