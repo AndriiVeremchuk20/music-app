@@ -13,8 +13,11 @@ interface LoginInputs {
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
-
-  const { register, handleSubmit } = useForm<LoginInputs>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginInputs>();
 
   const onChangeVisiblyPassword = useCallback(() => {
     setShowPassword((prev) => !prev);
@@ -33,25 +36,53 @@ const Login = () => {
         <div className="m-auto bg-white p-3 rounded-sm">
           <form className="flex flex-col mb-5" onSubmit={onSubmit}>
             <div className="text-2xl text-center mb-5">Login</div>
-            <label htmlFor="email" className="flex flex-col border-b mb-5">
-              Email:
+            <label
+              htmlFor="email"
+              className={`flex flex-col border-b mb-5 ${
+                errors.email && errors.email.type ? "border-red-600" : ""
+              }`}
+            >
+              <div className="flex">
+                Email:
+                {errors.email && errors.email.type && (
+                  <div className="mx-1 text-red-500">
+                    {errors.email.message}
+                  </div>
+                )}
+              </div>
               <input
                 type="email"
                 id="email"
                 className=" py-1 px-2 text-xl outline-none"
                 placeholder="example@mail.com"
-                {...register("email")}
+                {...register("email", {
+                  required: { value: true, message: "required" },
+                })}
               />
             </label>
-            <label htmlFor="password" className="flex flex-col border-b mb-5">
-              Password:{" "}
+            <label
+              htmlFor="password"
+              className={`flex flex-col border-b mb-5 ${
+                errors.email && errors.email.type ? "border-red-600" : ""
+              }`}
+            >
+              <div className="flex">
+                Password:
+                {errors.password && errors.password.type && (
+                  <div className="mx-1 text-red-500">
+                    {errors.password.message}
+                  </div>
+                )}
+              </div>
               <div>
                 <input
                   type={showPassword ? "text" : "password"}
                   id="password"
                   className=" py-1 px-2 text-xl outline-none"
                   placeholder="password"
-                  {...register("password")}
+                  {...register("password", {
+                    required: { value: true, message: "required" },
+                  })}
                 />
                 <button
                   onClick={onChangeVisiblyPassword}

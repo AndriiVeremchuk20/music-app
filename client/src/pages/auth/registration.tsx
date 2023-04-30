@@ -32,9 +32,9 @@ const Registration = () => {
   }, []);
 
   const onSubmit = handleSubmit((data) => {
-    console.log(data);
     if (data.password === data.repPasword) {
-      router.replace(AppRoutes.home);
+      console.log(data);      
+      //router.replace(AppRoutes.home);
     }
     setError("password", {
       type: "custom",
