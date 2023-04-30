@@ -4,7 +4,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
-import { firebaseApp, googleAuthProvider } from "../../firebase";
+import { googleAuthProvider } from "@/pages/_app";
 import { FcGoogle } from "react-icons/fc";
 import { useAtom } from "jotai";
 import { userAtom } from "@/atom";
@@ -15,19 +15,20 @@ const SignInWithGoogleButton = () => {
   const auth = getAuth();
   const [, setUser] = useAtom(userAtom);
 
-  const registrationMutation = useMutation(userAuth.registration, {
-    onSuccess(data) {
-      console.log(data);
-    },
-    onError(error) {
-      console.log(error);
-    },
-  });
+  // const registrationMutation = useMutation(userAuth.registration, {
+  //   onSuccess(data) {
+  //     console.log(data);
+  //   },
+  //   onError(error) {
+  //     console.log(error);
+  //   },
+  // });
 
   const handleSignInWithGoogle = () => {
     signInWithPopup(auth, googleAuthProvider)
       .then((credentials) => {
-        setUser(credentials.user);
+        // setUser(credentials.user);
+        console.log(credentials);
       })
       .catch((e) => {
         console.log(e);

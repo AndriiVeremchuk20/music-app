@@ -13,10 +13,26 @@ route.get("/", (req, res) => {
   }
 });
 
+//login
+route.post("/", async (req, res) => {
+  try {
+    const { uid } = req.body;
+    const { type } = req.body;
+
+    const user = await User.findOne({ uid: uid });
+
+    console.log(user);
+    res.status(200).send({ message: `${type} successful`, user: user });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Server error" });
+  }
+});
+
 //registration
 route.post("/registration", async (req, res) => {
   try {
-    const { firstName, lastName, email, password, uid } = req.body.user;
+    const { firstName, lastName, email, password, uid } = req.body;
     console.log(req.body);
 
     const newUser = await User.create({
@@ -29,29 +45,6 @@ route.post("/registration", async (req, res) => {
     res
       .status(204)
       .send({ massage: "Registration successful", id: newUser._id });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({ message: "Server error" });
-  }
-});
-
-/*
-  user: {
-    firstName: 'Андрей',
-    lastName: 'Веремчук',
-    email: 'andrei2k2@meta.ua',
-    password: '123456',
-    repPasword: '123456',
-    uid: 'GIMIRUhPltWc478QL4rc2Apng8n2'
-  }
-
-*/
-
-//login
-route.post("/login", (req, res) => {
-  try {
-    console.log(req.body);
-    res.status(200).send({ text: "Route test good" });
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: "Server error" });

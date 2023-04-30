@@ -1,17 +1,25 @@
 import client from "..";
+import { AuthBody, AuthResponse, RegistrationBody, RegistrationResponse } from "../types/userAuthTypes";
 
 const baseRoutes = {
   registration: "auth/registration",
-  login: "auth/login",
+  auth: "auth/",
 };
 
-const registration = async (user: any) => {
-  const response = await client.post<any>(baseRoutes.registration, { user });
+const registration = async (data: RegistrationBody) => {
+  const response = await client.post<RegistrationResponse>(baseRoutes.registration, data);
+  return response.data;
+};
+
+// add type request "login" or "authorisation"
+const auth = async (data: AuthBody) => {
+  const response = await client.post<AuthResponse>(baseRoutes.auth, data);
   return response.data;
 };
 
 const userAuth = {
-    registration,
+  registration,
+  auth,
 };
 
 export default userAuth;

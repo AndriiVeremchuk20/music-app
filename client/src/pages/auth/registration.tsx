@@ -45,14 +45,12 @@ const Registration = () => {
   const onSubmit = handleSubmit(async (data) => {
     if (data.password === data.repPasword) {
       console.log(data);
-      let uid;
       await createUserWithEmailAndPassword(auth, data.email, data.password)
         .then((credentials) => {
           console.log(credentials);
-          uid = credentials.user.uid;
+          registrationMutation.mutate({ ...data, uid: credentials.user.uid });
         })
         .catch((e) => console.log(e.message));
-      registrationMutation.mutate({ ...data, uid: uid });
       //router.replace(AppRoutes.home);
     }
     setError("password", {
@@ -245,36 +243,3 @@ const Registration = () => {
 };
 
 export default Registration;
-
-/*
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-} from "firebase/auth";
-import { firebaseApp, googleAuthProvider } from "../../../firebase";
-
-*/
-
-// const auth = getAuth(firebaseApp);
-// const [user, setUser] = useState(auth.currentUser);
-
-// useEffect(() => {
-//   const unsub = auth.onAuthStateChanged((user) => {
-//     if (user) {
-//       return setUser(user);
-//     }
-
-//     signInWithPopup(auth, googleAuthProvider)
-//       .then((credentials) => {
-//         setUser(credentials.user);
-//       })
-//       .catch((e) => console.log(e));
-
-//     //signInWithEmailAndPassword(auth, );
-//   });
-
-//   return unsub;
-// }, [auth]);
-
-// return <div>{user ? <div>{user.displayName}</div> : <div>Load</div>}</div>;

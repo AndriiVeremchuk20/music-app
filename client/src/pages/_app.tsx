@@ -1,13 +1,54 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useMutation,
+} from "@tanstack/react-query";
+import { useAtom } from "jotai";
+import { userAtom } from "@/atom";
+import { useEffect } from "react";
+import { GoogleAuthProvider, getAuth } from "firebase/auth";
 import { Header } from "@/layaut/Header";
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "../../firebase";
+import userAuth from "@/api/actions/userAuth";
+
+// Initialize Firebase
+export const firebaseApp = initializeApp(firebaseConfig);
+//export const firebaseAnalytics = getAnalytics(firebaseApp);
+export const googleAuthProvider = new GoogleAuthProvider();
 
 const AppWrapper = (props: any) => {
   return <QueryClientProvider client={new QueryClient()} {...props} />;
 };
 
 const AppInner = ({ Component, pageProps }: AppProps) => {
+  const auth = getAuth();
+  const [, setUser] = useAtom(userAtom);
+
+  const authMutation = useMutation(userAuth.auth, {
+    onSuccess(data) {
+      console.log(data);
+      setUser(data.user);
+    },
+    onError(e) {
+      console.log(e);
+    },
+  });
+
+  useEffect(() => {
+    const unsub = auth.onAuthStateChanged((mbUser) => {
+      if (mbUser) {
+        console.log(mbUser.uid);
+        return authMutation.mutate({ uid: mbUser.uid, type: "Auth" });
+        //  return setUser();
+      }
+    });
+
+    return unsub;
+  }, []);
+
   return <Component {...pageProps} />;
 };
 
@@ -23,3 +64,36 @@ const App = (props: AppProps) => {
 };
 
 export default App;
+
+/*
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from "firebase/auth";
+import { firebaseApp, googleAuthProvider } from "../../../firebase";
+
+*/
+
+// const auth = getAuth(firebaseApp);
+// const [user, setUser] = useState(auth.currentUser);
+
+// useEffect(() => {
+//   const unsub = auth.onAuthStateChanged((user) => {
+//     if (user) {
+//       return setUser(user);
+//     }
+
+//     signInWithPopup(auth, googleAuthProvider)
+//       .then((credentials) => {
+//         setUser(credentials.user);
+//       })
+//       .catch((e) => console.log(e));
+
+//     //signInWithEmailAndPassword(auth, );
+//   });
+
+//   return unsub;
+// }, [auth]);
+
+// return <div>{user ? <div>{user.displayName}</div> : <div>Load</div>}</div>;

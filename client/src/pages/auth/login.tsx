@@ -1,7 +1,13 @@
 import AppRoutes from "@/AppRoutes";
+import userAuth from "@/api/actions/userAuth";
+import { userAtom } from "@/atom";
 import AuthWihtGoogle from "@/components/AuthWithGoogleButton";
+import { useMutation } from "@tanstack/react-query";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useAtom } from "jotai";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BiShowAlt, BiHide } from "react-icons/bi";
@@ -12,7 +18,10 @@ interface LoginInputs {
 }
 
 const Login = () => {
+  const auth = getAuth();
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [, setUser] = useAtom(userAtom);
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -23,8 +32,24 @@ const Login = () => {
     setShowPassword((prev) => !prev);
   }, []);
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
+  const loginMutation = useMutation(userAuth.auth, {
+    onSuccess(data) {
+      //console.log(data);
+      setUser(data.user);
+      router.replace(AppRoutes.home);
+    },
+    onError(e) {
+      console.log(e);
+    },
+  });
+
+  const onSubmit = handleSubmit(async (data) => {
+    await signInWithEmailAndPassword(auth, data.email, data.password)
+      .then((credentials) => {
+        console.log(credentials);
+        loginMutation.mutate({ uid: credentials.user.uid, type: "Login" });
+      })
+      .catch((e) => console.log(e.message));
   });
 
   return (
