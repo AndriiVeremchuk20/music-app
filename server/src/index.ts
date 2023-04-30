@@ -1,15 +1,31 @@
-import express, { Express, Request, Response } from 'express';
-import dotenv from 'dotenv';
-
+import express, { Express, } from "express";
+import dotenv from "dotenv";
+import cors from "cors";
 dotenv.config();
 
-const app: Express = express();
-const port = process.env.PORT;
+import AuthRoute from "./routes/auth";
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Express + TypeScript Server');
+// connect to database
+import "./database";
+
+const app: Express = express();
+const PORT = process.env.PORT;
+
+//app dependencies
+app.use(cors(), express.urlencoded(), express.json());
+
+
+app.get("/", (req, res) => {
+  res.send("Welkome to musuc API server");
 });
 
-app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
+app.use((req, res, next) => {
+  console.log(`\t--> ${req.method}:${req.url}, Body: ${Object.keys(req.body)}`);
+  next();
+});
+
+app.use("/auth", AuthRoute);
+
+app.listen(PORT, () => {
+  console.log(`⚡️[server]: Server is running at http://localhost:${PORT}`);
 });

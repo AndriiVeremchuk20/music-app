@@ -5,8 +5,10 @@ import { BiShowAlt, BiHide } from "react-icons/bi";
 import Link from "next/link";
 import AppRoutes from "@/AppRoutes";
 import { useForm } from "react-hook-form";
-import { getAuth } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { useRouter } from "next/router";
+import { useMutation } from "@tanstack/react-query";
+import userAuth from "@/api/actions/userAuth";
 
 interface RegistrationInputs {
   firstName: string;
@@ -27,13 +29,30 @@ const Registration = () => {
     formState: { errors },
   } = useForm<RegistrationInputs>();
 
+  const registrationMutation = useMutation(userAuth.registration, {
+    onSuccess(data) {
+      console.log(data);
+    },
+    onError(error) {
+      console.log(error);
+    },
+  });
+
   const onChangeVisiblyPassword = useCallback(() => {
     setShowPassword((prev) => !prev);
   }, []);
 
-  const onSubmit = handleSubmit((data) => {
+  const onSubmit = handleSubmit(async (data) => {
     if (data.password === data.repPasword) {
-      console.log(data);      
+      console.log(data);
+      let uid;
+      await createUserWithEmailAndPassword(auth, data.email, data.password)
+        .then((credentials) => {
+          console.log(credentials);
+          uid = credentials.user.uid;
+        })
+        .catch((e) => console.log(e.message));
+      registrationMutation.mutate({ ...data, uid: uid });
       //router.replace(AppRoutes.home);
     }
     setError("password", {

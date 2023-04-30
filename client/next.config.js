@@ -9,6 +9,7 @@ const nextConfig = {
     FIREBASE_MESSAGING_SENDER_ID: "167267173426",
     FIREBASE_APP_ID: "1:167267173426:web:aa38aa855b1d1b13a7e82b",
     FIREBASE_MEASUREMENT_ID: "G-M9YKR6DRH0",
+    API_BASE_URL: "http://localhost:9000/",
   }
 }
 

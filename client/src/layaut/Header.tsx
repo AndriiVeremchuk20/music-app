@@ -3,9 +3,9 @@ import { Navbar } from './Navbar'
 
 export const Header = () => {
   return (
-    <div className=''>
-        <div>
-            Text
+    <div className=' bg-orange-400'>
+        <div className=''>
+            text
         </div>
         <Navbar/>
     </div>
