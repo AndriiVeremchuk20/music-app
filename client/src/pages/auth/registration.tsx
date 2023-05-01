@@ -9,6 +9,7 @@ import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { useRouter } from "next/router";
 import { useMutation } from "@tanstack/react-query";
 import userAuth from "@/api/actions/userAuth";
+import { Loader } from "@/components/Loader";
 
 interface RegistrationInputs {
   firstName: string;
@@ -32,6 +33,7 @@ const Registration = () => {
   const registrationMutation = useMutation(userAuth.registration, {
     onSuccess(data) {
       console.log(data);
+      router.replace(AppRoutes.auth.login);
     },
     onError(error) {
       console.log(error);
@@ -51,7 +53,6 @@ const Registration = () => {
           registrationMutation.mutate({ ...data, uid: credentials.user.uid });
         })
         .catch((e) => console.log(e.message));
-      //router.replace(AppRoutes.home);
     }
     setError("password", {
       type: "custom",
@@ -64,6 +65,11 @@ const Registration = () => {
       <Head>
         <title>Registration</title>
       </Head>
+      <>
+        {
+          registrationMutation.isLoading?<Loader/>:null
+        }
+      </>
       <div className="w-full h-screen flex bg-gradient-to-r from-indigo-500 from-20% via-sky-500 via-50% to-emerald-500 to-90%">
         <div className="m-auto bg-white rounded-sm p-3">
           <form className="w-72 flex flex-col mb-5 m-3" onSubmit={onSubmit}>

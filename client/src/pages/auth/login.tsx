@@ -2,6 +2,7 @@ import AppRoutes from "@/AppRoutes";
 import userAuth from "@/api/actions/userAuth";
 import { userAtom } from "@/atom";
 import AuthWihtGoogle from "@/components/AuthWithGoogleButton";
+import { Loader } from "@/components/Loader";
 import { useMutation } from "@tanstack/react-query";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useAtom } from "jotai";
@@ -57,6 +58,7 @@ const Login = () => {
       <Head>
         <title>Login</title>
       </Head>
+      {loginMutation.isLoading ? <Loader /> : null}
       <div className="w-full h-screen flex bg-gradient-to-r from-indigo-500 from-20% via-sky-500 via-50% to-emerald-500 to-90%">
         <div className="m-auto bg-white p-3 rounded-sm">
           <form className="flex flex-col mb-5" onSubmit={onSubmit}>

@@ -20,13 +20,13 @@ export const Loader = () => {
 
   return (
     <div className="w-full h-screen fixed flex z-20 bg-orange-400 bg-opacity-30">
-      <div className="flex m-auto w-96 h-64">{sticks}</div>
+      <div className="flex m-auto w-96 h-32">{sticks}</div>
     </div>
   );
 };
 
 const Stick = () => {
   return (
-    <div className="w-3 h-32 mx-1 rounded-md bg-blue-700 animate-bounce"></div>
+    <div className="w-3 h-full mx-1 rounded-md bg-blue-700 animate-bounce"></div>
   );
 };

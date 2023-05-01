@@ -13,6 +13,7 @@ import { Header } from "@/layaut/Header";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../../firebase";
 import userAuth from "@/api/actions/userAuth";
+import { Loader } from "@/components/Loader";
 
 // Initialize Firebase
 export const firebaseApp = initializeApp(firebaseConfig);
@@ -49,7 +50,12 @@ const AppInner = ({ Component, pageProps }: AppProps) => {
     return unsub;
   }, []);
 
-  return <Component {...pageProps} />;
+  return (
+    <>
+      {authMutation.isLoading?<Loader/>:null}
+      <Component {...pageProps} />
+    </>
+  );
 };
 
 const App = (props: AppProps) => {
