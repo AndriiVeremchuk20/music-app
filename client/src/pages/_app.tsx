@@ -62,7 +62,9 @@ const App = (props: AppProps) => {
     <>
       <AppWrapper>
         <Header />
-        <AppInner {...props} />
+        <div className="bg-gradient-to-r from-indigo-500 from-20% via-sky-500 via-50% to-emerald-500 to-90%">
+          <AppInner {...props} />
+        </div>
       </AppWrapper>
     </>
   );
