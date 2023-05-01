@@ -18,7 +18,7 @@ route.post("/", async (req, res) => {
   try {
     const { uid } = req.body;
     const { type } = req.body;
-
+    
     const user = await User.findOne({ uid: uid });
 
     console.log(user);

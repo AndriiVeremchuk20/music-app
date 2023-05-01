@@ -43,7 +43,6 @@ const AppInner = ({ Component, pageProps }: AppProps) => {
       if (mbUser) {
         console.log(mbUser.uid);
         return authMutation.mutate({ uid: mbUser.uid, type: "Auth" });
-        //  return setUser();
       }
     });
 
@@ -52,7 +51,7 @@ const AppInner = ({ Component, pageProps }: AppProps) => {
 
   return (
     <>
-      {authMutation.isLoading?<Loader/>:null}
+      {authMutation.isLoading ? <Loader /> : null}
       <Component {...pageProps} />
     </>
   );
@@ -70,36 +69,3 @@ const App = (props: AppProps) => {
 };
 
 export default App;
-
-/*
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-} from "firebase/auth";
-import { firebaseApp, googleAuthProvider } from "../../../firebase";
-
-*/
-
-// const auth = getAuth(firebaseApp);
-// const [user, setUser] = useState(auth.currentUser);
-
-// useEffect(() => {
-//   const unsub = auth.onAuthStateChanged((user) => {
-//     if (user) {
-//       return setUser(user);
-//     }
-
-//     signInWithPopup(auth, googleAuthProvider)
-//       .then((credentials) => {
-//         setUser(credentials.user);
-//       })
-//       .catch((e) => console.log(e));
-
-//     //signInWithEmailAndPassword(auth, );
-//   });
-
-//   return unsub;
-// }, [auth]);
-
-// return <div>{user ? <div>{user.displayName}</div> : <div>Load</div>}</div>;
