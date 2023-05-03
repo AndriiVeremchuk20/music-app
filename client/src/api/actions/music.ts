@@ -6,7 +6,6 @@ const baseRoutes = {
 
 const uploadMusic = async (data: any) => {
   const formData = new FormData();
-
   formData.append("title", data.title);
   formData.append("poster", data.poster[0]);
   formData.append("music", data.music[0]);
@@ -18,7 +17,7 @@ const uploadMusic = async (data: any) => {
       headers: {
         "Content-Type": "multipart/form-data",
       },
-    },
+    }
   );
   return response.data;
 };
