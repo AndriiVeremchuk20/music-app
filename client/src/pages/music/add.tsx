@@ -1,10 +1,12 @@
+import music from "@/api/actions/music";
+import { useMutation } from "@tanstack/react-query";
 import React from "react";
 import { useForm } from "react-hook-form";
 
 interface InputsType {
   title: string;
   poster: FileList;
-  sound: FileList;
+  music: FileList;
 }
 
 const AddMusic = () => {
@@ -14,12 +16,25 @@ const AddMusic = () => {
     formState: { errors },
   } = useForm<InputsType>();
 
-  const onSubmit = handleSubmit((data)=>{
+  const uploadMusicMutation = useMutation(music.uploadMusic, {
+    onSuccess(data) {
+      console.log(data);
+    },
+    onError(e) {
+      console.log(e);
+    },
+  });
+
+  // onUploadProgress: (progressEvent) => {
+  //   setUploadProgress(
+  //     Math.round((progressEvent.loaded * 100) / progressEvent.total)
+  //   );
+  // },
+
+  const onSubmit = handleSubmit((data) => {
     console.log(data);
-    if(data.sound[0].size > 10*1024*1024){
-      console.log("File soo big")
-    }
-  })
+    uploadMusicMutation.mutate(data);
+  });
 
   return (
     <div className="w-full min-h-screen max-h-auto pt-40">
@@ -44,7 +59,7 @@ const AddMusic = () => {
             <input
               type="file"
               id="sound"
-              {...register("sound", {
+              {...register("music", {
                 required: { value: true, message: "required" },
               })}
             />

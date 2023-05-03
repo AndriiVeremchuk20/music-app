@@ -2,6 +2,7 @@ import AppRoutes from "@/AppRoutes";
 import Link from "next/link";
 import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
+import { LogOutButton } from "./LogOutButton";
 
 interface PropMenu {
   show: boolean;
@@ -19,6 +20,7 @@ export const Menu: React.FC<PropMenu> = ({ show, hide }) => {
           <Link href={AppRoutes.home} className="underline text-3xl text-white hover:text-opacity-50">Home</Link>
           <Link href={AppRoutes.profile.index} className="underline text-3xl text-white hover:text-opacity-50">Profile</Link>
           <Link href={AppRoutes.music.add} className="underline text-3xl text-white hover:text-opacity-50">Add sound</Link>
+          <LogOutButton/>
         </div>
       </div>
     );

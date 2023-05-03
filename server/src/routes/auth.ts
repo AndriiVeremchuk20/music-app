@@ -18,10 +18,10 @@ route.post("/", async (req, res) => {
   try {
     const { uid } = req.body;
     const { type } = req.body;
-    
+
     const user = await User.findOne({ uid: uid });
 
-    console.log(user);
+    //console.log(user);
     res.status(200).send({ message: `${type} successful`, user: user });
   } catch (error) {
     console.log(error);
