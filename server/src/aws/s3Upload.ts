@@ -37,7 +37,7 @@ const uploadPoster = multer({
       cb(null, { fieldName: file.fieldname });
     },
     key: function (req, file, cb) {
-      cb(null,"/music/poster/"+Date.now().toString() + file.originalname);
+      cb(null,  "/music/poster/"+Date.now().toString()+file.originalname);
     },
   }),
 });

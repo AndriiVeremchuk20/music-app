@@ -4,21 +4,13 @@ const baseRoutes = {
   upload: "music/",
 };
 
-const uploadMusic = async (data: any) => {
-  const formData = new FormData();
-  formData.append("title", data.title);
-  formData.append("poster", data.poster[0]);
-  formData.append("music", data.music[0]);
+const uploadMusic = async (data: FormData) => {
 
-  const response = await client.post(
-    baseRoutes.upload,
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const response = await client.post(baseRoutes.upload, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return response.data;
 };
 
