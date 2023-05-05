@@ -13,7 +13,11 @@ const app: Express = express();
 const PORT = process.env.PORT;
 
 //app dependencies
-app.use(cors(), express.urlencoded(), express.json());
+app.use(cors(), express.urlencoded(), express.json({limit: "200mb"}));
+
+// app.use(bodyParser.json({ limit: '10mb' }));
+// app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
+
 
 app.get("/", (req, res) => {
   res.send("Welkome to musuc API server");

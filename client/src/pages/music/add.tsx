@@ -5,8 +5,8 @@ import { useForm } from "react-hook-form";
 
 interface InputsType {
   title: string;
-  poster: File;
-  music: File;
+  poster: FileList;
+  music: FileList;
 }
 
 const AddMusic = () => {
@@ -35,8 +35,8 @@ const AddMusic = () => {
     console.log(data);
     const formData = new FormData();
     formData.append("title", data.title);
-    formData.append("poster", data.poster);
-    formData.append("poster", data.music);
+    formData.append("poster", data.poster[0]);
+    formData.append("music", data.music[0]);
     console.log(formData);
 
     uploadMusicMutation.mutate(formData);

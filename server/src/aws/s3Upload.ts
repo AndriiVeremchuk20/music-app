@@ -15,45 +15,45 @@ const s3Config = new S3Client({
   },
 });
 
-const uploadAudio = multer({
-  storage: multerS3({
-    s3: s3Config,
-    bucket: bucketName,
-    metadata: function (req, file, cb) {
-      cb(null, { fieldName: file.fieldname });
-    },
-    key: function (req, file, cb) {
-      cb(null,"/music/audio/"+Date.now().toString() + file.originalname);
-    },
-  }),
-});
+// const uploadMusicToS3 = multer({
+//   storage: multerS3({
+//     s3: s3Config,
+//     bucket: bucketName,
+//     metadata: function (req, file, cb) {
+//       cb(null, { fieldName: file.fieldname });
+//     },
+//     key: function (req, file, cb) {
+//       cb(null,"/music/audio/"+Date.now().toString() + file.originalname);
+//     },
+//   }),
+// });
 
 
-const uploadPoster = multer({
-  storage: multerS3({
-    s3: s3Config,
-    bucket: bucketName,
-    metadata: function (req, file, cb) {
-      cb(null, { fieldName: file.fieldname });
-    },
-    key: function (req, file, cb) {
-      cb(null,  "/music/poster/"+Date.now().toString()+file.originalname);
-    },
-  }),
-});
+// const uploadPosterToS3 = multer({
+//   storage: multerS3({
+//     s3: s3Config,
+//     bucket: bucketName,
+//     metadata: function (req, file, cb) {
+//       cb(null, { fieldName: file.fieldname });
+//     },
+//     key: function (req, file, cb) {
+//       cb(null,  "/music/poster/"+Date.now().toString()+file.originalname);
+//     },
+//   }),
+// });
 
 
-const uploadAvatar = multer({
-  storage: multerS3({
-    s3: s3Config,
-    bucket: bucketName,
-    metadata: function (req, file, cb) {
-      cb(null, { fieldName: file.fieldname });
-    },
-    key: function (req, file, cb) {
-      cb(null,"/usersAvatars"+Date.now().toString() + file.originalname);
-    },
-  }),
-});
+// const uploadAvatar = multer({
+//   storage: multerS3({
+//     s3: s3Config,
+//     bucket: bucketName,
+//     metadata: function (req, file, cb) {
+//       cb(null, { fieldName: file.fieldname });
+//     },
+//     key: function (req, file, cb) {
+//       cb(null,"/usersAvatars"+Date.now().toString() + file.originalname);
+//     },
+//   }),
+// });
 
-export { uploadAudio, uploadPoster, uploadAvatar };
+//export { uploadMusicToS3, uploadPosterToS3, uploadAvatar };
