@@ -1,18 +1,14 @@
 import { S3 } from "aws-sdk";
+import awsS3Client from "../aws/s3Upload";
 import { Router } from "express";
 import multer from "multer";
 
 const route = Router();
 
-const accessIdKey = process.env.AWS_ACCESS_KEY_ID as string;
-const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY_ID as string;
-const bucketRegion = process.env.AWS_BUCKET_REGION as string;
+// const accessIdKey = process.env.AWS_ACCESS_KEY_ID as string;
+// const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY_ID as string;
+// const bucketRegion = process.env.AWS_BUCKET_REGION as string;
 const bucketName = process.env.AWS_BUCKET_NAME as string;
-
-const s3 = new S3({
-  accessKeyId: accessIdKey,
-  secretAccessKey: secretAccessKey,
-});
 
 const upload = multer().fields([
   { name: "poster", maxCount: 1 },
@@ -45,7 +41,7 @@ route.post("/", upload, async (req, res) => {
       Body: musicFile.buffer,
       ACL: "public-read",
     };
-    const musicResult = await s3.upload(musicParams).promise();
+    const musicResult = await awsS3Client.upload(musicParams).promise();
 
     // upload poster file to S3
     const posterParams: S3.PutObjectRequest = {
@@ -54,7 +50,7 @@ route.post("/", upload, async (req, res) => {
       Body: posterFile.buffer,
       ACL: "public-read",
     };
-    const posterResult = await s3.upload(posterParams).promise();
+    const posterResult = await awsS3Client.upload(posterParams).promise();
 
     // send response to the client
     res.send({
