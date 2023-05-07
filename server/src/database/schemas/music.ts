@@ -27,6 +27,13 @@ const musicSchema = new mongoose.Schema({
     require: true,
     default: Date.now(),
   },
+  userId: {
+    type: String,
+    ref: "User",
+    require: true,
+  },
 });
 
 const Music = mongoose.model("Music", musicSchema);
+
+export default Music;

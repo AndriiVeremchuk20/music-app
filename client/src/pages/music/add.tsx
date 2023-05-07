@@ -1,5 +1,8 @@
 import music from "@/api/actions/music";
+import { userAtom } from "@/atom";
+import { Loader } from "@/components/Loader";
 import { useMutation } from "@tanstack/react-query";
+import { useAtom } from "jotai";
 import React from "react";
 import { useForm } from "react-hook-form";
 
@@ -12,6 +15,8 @@ interface InputsType {
 }
 
 const AddMusic = () => {
+  const [user] = useAtom(userAtom);
+
   const {
     register,
     handleSubmit,
@@ -29,17 +34,22 @@ const AddMusic = () => {
 
   const onSubmit = handleSubmit((data) => {
     console.log(data);
-    const formData = new FormData();
-    formData.append("title", data.title);
-    formData.append("poster", data.poster[0]);
-    formData.append("music", data.music[0]);
-    console.log(formData);
-
-    uploadMusicMutation.mutate(formData);
+    if (user) {
+      const formData = new FormData();
+      formData.append("userId", user._id);
+      formData.append("title", data.title);
+      formData.append("poster", data.poster[0]);
+      formData.append("music", data.music[0]);
+      formData.append("genre", data.genre);
+      formData.append("isPrivate", data.isPrivate + "");
+      console.log(formData);
+      uploadMusicMutation.mutate(formData);
+    }
   });
 
   return (
     <div className="w-full min-h-screen max-h-auto pt-40">
+      {uploadMusicMutation.isLoading ? <Loader /> : null}
       <div className="w-full flex justify-center">
         <form
           className="flex flex-col m-auto bg-white rounded-sm p-3"

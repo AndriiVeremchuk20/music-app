@@ -2,24 +2,35 @@ import { S3 } from "aws-sdk";
 import awsS3Client from "../aws/s3Upload";
 import { Router } from "express";
 import multer from "multer";
+import Music from "../database/schemas/music";
 
 const route = Router();
 
-// const accessIdKey = process.env.AWS_ACCESS_KEY_ID as string;
-// const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY_ID as string;
-// const bucketRegion = process.env.AWS_BUCKET_REGION as string;
 const bucketName = process.env.AWS_BUCKET_NAME as string;
 
 const upload = multer().fields([
   { name: "poster", maxCount: 1 },
   { name: "music", maxCount: 1 },
-  { name: "title" },
 ]);
+
+route.get("/", async (req, res) => {
+  try {
+    const music = await Music.find({});
+    res.status(200).send({ message: "success", music: music });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Server error" });
+  }
+});
 
 route.post("/", upload, async (req, res) => {
   try {
     console.log(req.body);
     console.log(req.files);
+
+    const { title, isPrivate, genre, userId } = req.body;
+
+    console.log(title, isPrivate, genre);
 
     if (!req.files) {
       return res.status(500).send({ message: "Files not found" });
@@ -37,7 +48,7 @@ route.post("/", upload, async (req, res) => {
     // upload music file to S3
     const musicParams: S3.PutObjectRequest = {
       Bucket: bucketName,
-      Key: `music/audio/${Date.now()}-${musicFile.filename}`,
+      Key: `music/audio/${Date.now()}-${musicFile.originalname}`,
       Body: musicFile.buffer,
       ACL: "public-read",
     };
@@ -46,17 +57,23 @@ route.post("/", upload, async (req, res) => {
     // upload poster file to S3
     const posterParams: S3.PutObjectRequest = {
       Bucket: bucketName,
-      Key: `music/poster/${Date.now()}-${posterFile.filename}`,
+      Key: `music/poster/${Date.now()}-${posterFile.originalname}`,
       Body: posterFile.buffer,
       ACL: "public-read",
     };
     const posterResult = await awsS3Client.upload(posterParams).promise();
 
-    // send response to the client
-    res.send({
-      musicUrl: musicResult.Location,
-      posterUrl: posterResult.Location,
+    const newMusic = await Music.create({
+      title: title,
+      genre: genre,
+      isPrivate: isPrivate === "on",
+      posterPath: posterResult.Location,
+      musicPath: musicResult.Location,
+      userId: userId,
     });
+
+    // send response to the client
+    res.status(202).send({ message: "Added success", newMusic: newMusic });
   } catch (e) {
     console.log(e);
     res.status(500).send({ message: "Server error" });
