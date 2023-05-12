@@ -28,9 +28,7 @@ route.post("/", upload, async (req, res) => {
     console.log(req.body);
     console.log(req.files);
 
-    const { title, isPrivate, genre, userId } = req.body;
-
-    console.log(title, isPrivate, genre);
+    const { title, genre, userId } = req.body;
 
     if (!req.files) {
       return res.status(500).send({ message: "Files not found" });
@@ -66,7 +64,6 @@ route.post("/", upload, async (req, res) => {
     const newMusic = await Music.create({
       title: title,
       genre: genre,
-      isPrivate: isPrivate === "on",
       posterPath: posterResult.Location,
       musicPath: musicResult.Location,
       userId: userId,

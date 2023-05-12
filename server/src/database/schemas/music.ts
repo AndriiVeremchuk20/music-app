@@ -9,10 +9,6 @@ const musicSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  isPrivate: {
-    type: Boolean,
-    default: false,
-  },
   posterPath: {
     type: String,
     default: null,

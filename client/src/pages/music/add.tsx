@@ -11,7 +11,6 @@ interface InputsType {
   poster: FileList;
   music: FileList;
   genre: string;
-  isPrivate: boolean;
 }
 
 const AddMusic = () => {
@@ -41,7 +40,6 @@ const AddMusic = () => {
       formData.append("poster", data.poster[0]);
       formData.append("music", data.music[0]);
       formData.append("genre", data.genre);
-      formData.append("isPrivate", data.isPrivate + "");
       console.log(formData);
       uploadMusicMutation.mutate(formData);
     }
@@ -112,15 +110,6 @@ const AddMusic = () => {
               <option value="soul">Soul</option>
               <option value="classical">Classical Music</option>
             </select>
-          </label>
-          <label htmlFor="is-private" className="border-b flex py-1 my-3">
-            Is private:
-            <input
-              type="radio"
-              id="is-private"
-              className="mx-1"
-              {...register("isPrivate")}
-            />
           </label>
 
           <button
