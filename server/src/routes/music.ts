@@ -16,7 +16,7 @@ const upload = multer().fields([
 route.get("/", async (req, res) => {
   try {
     const music = await Music.find({});
-    res.status(200).send({ message: "success", music: music });
+    res.status(200).send({ message: "success", data: music });
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: "Server error" });

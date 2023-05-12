@@ -1,12 +1,19 @@
+import { Music } from "@/types/music";
 import client from "..";
+import { baseResponse } from "../types/baseResponse";
 
 const baseRoutes = {
+  get: "music/",
   upload: "music/",
 };
 
-const uploadMusic = async (data: FormData) => {
+const getMusic = async () => {
+  const response = await client.get<baseResponse<Array<Music>>>(baseRoutes.get);
+  return response.data;
+};
 
-  const response = await client.post(baseRoutes.upload, data, {
+const uploadMusic = async (data: FormData) => {
+  const response = await client.post<baseResponse<Music>>(baseRoutes.upload, data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -15,6 +22,7 @@ const uploadMusic = async (data: FormData) => {
 };
 
 const music = {
+  getMusic,
   uploadMusic,
 };
 
