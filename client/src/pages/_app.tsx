@@ -30,7 +30,6 @@ const AppInner = ({ Component, pageProps }: AppProps) => {
 
   const authMutation = useMutation(userAuth.auth, {
     onSuccess(data) {
-      console.log("Request here")
       console.log(data);
       setUser(data.user);
     },

@@ -23,6 +23,16 @@ route.get("/", async (req, res) => {
   }
 });
 
+route.get("/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    console.log();
+    const userMusic = await Music.find({ userId });
+
+    res.status(200).send({ message: "success", data: userMusic });
+  } catch (error) {}
+});
+
 route.post("/", upload, async (req, res) => {
   try {
     console.log(req.body);

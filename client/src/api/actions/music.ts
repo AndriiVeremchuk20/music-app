@@ -4,6 +4,7 @@ import { baseResponse } from "../types/baseResponse";
 
 const baseRoutes = {
   get: "music/",
+  getUserMusic: (id: string) => `music/${id}`,
   upload: "music/",
 };
 
@@ -12,17 +13,29 @@ const getMusic = async () => {
   return response.data;
 };
 
+const getUserMusic = async ({ id }: { id: string }) => {
+  const response = await client.get<baseResponse<Array<Music>>>(
+    baseRoutes.getUserMusic(id)
+  );
+  return response.data;
+};
+
 const uploadMusic = async (data: FormData) => {
-  const response = await client.post<baseResponse<Music>>(baseRoutes.upload, data, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  const response = await client.post<baseResponse<Music>>(
+    baseRoutes.upload,
+    data,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
   return response.data;
 };
 
 const music = {
   getMusic,
+  getUserMusic,
   uploadMusic,
 };
 
