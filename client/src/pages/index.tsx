@@ -1,6 +1,7 @@
 import music from "@/api/actions/music";
 import { userAtom } from "@/atom";
 import { Menu } from "@/components/Menu";
+import { MusicList } from "@/components/MusicList";
 import { Music } from "@/types/music";
 import { useMutation } from "@tanstack/react-query";
 import { useAtom } from "jotai";
@@ -32,13 +33,7 @@ const Home: React.FC = () => {
         Maxime pariatur neque corrupti non. Maiores rerum amet quos!
       </div>
       <div>
-        {musicList.map((item) => (
-          <div key={item._id}>
-            <div>{item.title}</div>
-            <img src={item.posterPath} />
-            <audio src={item.musicPath} controls/>
-          </div>
-        ))}
+        <MusicList musicList={musicList}/>
       </div>
     </div>
   );
