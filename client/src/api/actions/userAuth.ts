@@ -1,5 +1,10 @@
 import client from "..";
-import { AuthBody, AuthResponse, RegistrationBody, RegistrationResponse } from "../types/userAuthTypes";
+import {
+  AuthBody,
+  AuthResponse,
+  RegistrationBody,
+  RegistrationResponse,
+} from "../types/userAuthTypes";
 
 const baseRoutes = {
   registration: "auth/registration",
@@ -7,7 +12,10 @@ const baseRoutes = {
 };
 
 const registration = async (data: RegistrationBody) => {
-  const response = await client.post<RegistrationResponse>(baseRoutes.registration, data);
+  const response = await client.post<RegistrationResponse>(
+    baseRoutes.registration,
+    data
+  );
   return response.data;
 };
 

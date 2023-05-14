@@ -10,7 +10,10 @@ const nextConfig = {
     FIREBASE_APP_ID: "1:167267173426:web:aa38aa855b1d1b13a7e82b",
     FIREBASE_MEASUREMENT_ID: "G-M9YKR6DRH0",
     API_BASE_URL: "http://localhost:9000/",
-  }
+  },
+  images: {
+    domains: ['music-app-media-data.s3.eu-north-1.amazonaws.com'],
+  },
 }
 
 module.exports = nextConfig

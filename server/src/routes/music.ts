@@ -4,6 +4,7 @@ import { Router } from "express";
 import multer from "multer";
 import { v4 as uuid } from "uuid";
 import Music from "../database/schemas/music";
+import User from "../database/schemas/user";
 
 const route = Router();
 
@@ -16,7 +17,18 @@ const upload = multer().fields([
 
 route.get("/", async (req, res) => {
   try {
-    const music = await Music.find({});
+    let music = await Music.find({});
+
+    //  Promise.all(
+    //   music.map(async (sound) => {
+    //     const poster = await User.findById(sound.userId);
+    //     return {
+    //       ...music,
+    //       fullUserName: poster?.firstName + " " + poster?.lastName,
+    //     };
+    //   })
+    // );
+
     res.status(200).send({ message: "success", data: music });
   } catch (error) {
     console.log(error);
