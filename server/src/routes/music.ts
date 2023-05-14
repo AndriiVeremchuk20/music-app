@@ -2,6 +2,7 @@ import { S3 } from "aws-sdk";
 import awsS3Client from "../aws/s3Upload";
 import { Router } from "express";
 import multer from "multer";
+import { v4 as uuid } from "uuid";
 import Music from "../database/schemas/music";
 
 const route = Router();
@@ -53,10 +54,13 @@ route.post("/", upload, async (req, res) => {
       musicFile = req.files.music?.[0];
       posterFile = req.files.poster?.[0];
     }
+
+    const fileіId = uuid(); // make unique id for files
+
     // upload music file to S3
     const musicParams: S3.PutObjectRequest = {
       Bucket: bucketName,
-      Key: `music/audio/${Date.now()}-${musicFile.originalname}`,
+      Key: `music/audio/${fileіId}-${musicFile.originalname}`,
       Body: musicFile.buffer,
       ACL: "public-read",
     };
@@ -65,7 +69,7 @@ route.post("/", upload, async (req, res) => {
     // upload poster file to S3
     const posterParams: S3.PutObjectRequest = {
       Bucket: bucketName,
-      Key: `music/poster/${Date.now()}-${posterFile.originalname}`,
+      Key: `music/poster/${fileіId}-${posterFile.originalname}`,
       Body: posterFile.buffer,
       ACL: "public-read",
     };
@@ -85,6 +89,11 @@ route.post("/", upload, async (req, res) => {
     console.log(e);
     res.status(500).send({ message: "Server error" });
   }
+});
+
+// add deleting sounds
+route.delete("/", async (req, res) => {
+  res.send(200);
 });
 
 export default route;

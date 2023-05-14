@@ -2,5 +2,6 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/profile/mySounds": "pages/profile/mySounds.js"
+  "/": "pages/index.js",
+  "/music/add": "pages/music/add.js"
 }
