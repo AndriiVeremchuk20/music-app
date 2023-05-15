@@ -2,7 +2,7 @@ import { currentSoundAtom } from "@/atom";
 import { Music } from "@/types/music";
 import Image from "next/image";
 import { useAtom } from "jotai";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import useSound from "use-sound";
 import { FaPlay } from "react-icons/fa";
 
@@ -28,11 +28,21 @@ export const MusicCard: React.FC<PropMusicCard> = ({ music, bgColor }) => {
   // };
 
   const [showPlay, setShowPlay] = useState<boolean>(false);
+  const timeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleMouseHover = () => {
-    setShowPlay(true);
+    if (timeout.current) {
+      clearTimeout(timeout.current);
+    }
+    const timeoutId = setTimeout(() => setShowPlay(true), 100);
+    timeout.current = timeoutId;
   };
+
   const handleMouseLeave = () => {
+    if (timeout.current) {
+      clearTimeout(timeout.current);
+      timeout.current = null;
+    }
     setShowPlay(false);
   };
 
@@ -41,7 +51,7 @@ export const MusicCard: React.FC<PropMusicCard> = ({ music, bgColor }) => {
       onMouseOut={handleMouseHover}
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseHover}
-      className="w-48 h-48 flex flex-col rounded-md bg-center bg-cover bg-no-repeat hover:bg-opacity-50"
+      className="w-48 h-48 flex flex-col rounded-md bg-center bg-cover bg-no-repeat"
       style={{ backgroundImage: `url(${music.posterPath})` }}
     >
       {showPlay ? (

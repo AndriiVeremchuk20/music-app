@@ -3,6 +3,7 @@ const AppRoutes = {
   music: {
     index: "/music",
     add: "/music/add",
+    idSound: (id: string) => `/music/${id}`,
   },
   auth: {
     login: "/auth/login",
