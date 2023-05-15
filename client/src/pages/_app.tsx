@@ -6,7 +6,7 @@ import {
   useMutation,
 } from "@tanstack/react-query";
 import { useAtom } from "jotai";
-import { userAtom } from "@/atom";
+import { currentSoundAtom, userAtom } from "@/atom";
 import { useEffect } from "react";
 import { GoogleAuthProvider, getAuth } from "firebase/auth";
 import { Header } from "@/layaut/Header";
@@ -14,6 +14,7 @@ import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../../firebase";
 import userAuth from "@/api/actions/userAuth";
 import { Loader } from "@/components/Loader";
+import { Player } from "@/components/Player";
 
 // Initialize Firebase
 export const firebaseApp = initializeApp(firebaseConfig);
@@ -58,6 +59,8 @@ const AppInner = ({ Component, pageProps }: AppProps) => {
 };
 
 const App = (props: AppProps) => {
+  const [currentSound] = useAtom(currentSoundAtom);
+
   return (
     <>
       <AppWrapper>
@@ -65,6 +68,7 @@ const App = (props: AppProps) => {
         <div className="bg-gradient-to-r from-indigo-500 from-20% via-sky-500 via-50% to-emerald-500 to-90%">
           <AppInner {...props} />
         </div>
+        <Player sound={currentSound} />
       </AppWrapper>
     </>
   );

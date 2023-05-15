@@ -3,7 +3,6 @@ import { Music } from "@/types/music";
 import Image from "next/image";
 import { useAtom } from "jotai";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import useSound from "use-sound";
 import { FaPlay } from "react-icons/fa";
 
 interface PropMusicCard {
@@ -12,23 +11,15 @@ interface PropMusicCard {
 }
 
 export const MusicCard: React.FC<PropMusicCard> = ({ music, bgColor }) => {
-  // const [isPaused, setIsPaused] = useState<boolean>(true);
-  // //  const [currentSound, setCurrentSound] = useAtom(currentSoundAtom);
-  // const [play, { pause, duration, sound }] = useSound(music.musicPath);
-
-  // const onPlayClick = () => {
-  //   //setCurrentSound(music);
-  //   setIsPaused(false);
-  //   play();
-  // };
-
-  // const onPauseClick = () => {
-  //   setIsPaused(true);
-  //   pause();
-  // };
-
+  const [currSound, setCurrSound] = useAtom(currentSoundAtom);
   const [showPlay, setShowPlay] = useState<boolean>(false);
+  const [isPlayed, setIsPlayed] = useState<boolean>(false);
   const timeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const onPlayClick = useCallback(() => {
+    console.log("music played");
+    setCurrSound(music);
+  }, []);
 
   const handleMouseHover = () => {
     if (timeout.current) {
@@ -43,7 +34,8 @@ export const MusicCard: React.FC<PropMusicCard> = ({ music, bgColor }) => {
       clearTimeout(timeout.current);
       timeout.current = null;
     }
-    setShowPlay(false);
+    const timeoutId = setTimeout(() => setShowPlay(false), 100);
+    timeout.current = timeoutId;
   };
 
   return (
@@ -51,12 +43,15 @@ export const MusicCard: React.FC<PropMusicCard> = ({ music, bgColor }) => {
       onMouseOut={handleMouseHover}
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseHover}
-      className="w-48 h-48 flex flex-col rounded-md bg-center bg-cover bg-no-repeat"
+      className={`w-48 h-48 flex flex-col rounded-md bg-center bg-cover bg-no-repeat shadow-xl shadow-black`}
       style={{ backgroundImage: `url(${music.posterPath})` }}
     >
       {showPlay ? (
-        <div className="flex flex-col w-full h-full bg-slate-600 bg-opacity-40 rounded-t-md">
-          <FaPlay className="m-auto text-3xl fill-white cursor-pointer" />
+        <div className="flex flex-col w-full h-full bg-neutral-900 bg-opacity-40 rounded-t-md">
+          <FaPlay
+            onClick={onPlayClick}
+            className="m-auto text-3xl fill-white cursor-pointer hover:scale-110"
+          />
         </div>
       ) : null}
       <div

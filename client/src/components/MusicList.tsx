@@ -14,11 +14,12 @@ const colors = [
   "bg-indigo-500",
   "bg-purple-500",
   "bg-pink-500",
+  "bg-orange-500",
 ];
 
 export const MusicList: React.FC<PropMusicList> = ({ musicList }) => {
   return (
-    <div className="grid grid-cols-8 grid-flow-row-dense">
+    <div className="grid grid-cols-6 gap-y-8 grid-flow-row-dense">
       {musicList.map((item, index) => (
         <MusicCard
           key={item._id}
