@@ -1,9 +1,11 @@
-import { currentSoundAtom } from "@/atom";
+import { currentPlaylistAtom, currentSoundAtom } from "@/atom";
 import { Music } from "@/types/music";
 import { useAtom } from "jotai";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FaPlay } from "react-icons/fa";
 import { AiFillPauseCircle } from "react-icons/ai";
+import { useMutation } from "@tanstack/react-query";
+import musicApi from "@/api/actions/music";
 
 interface PropMusicCard {
   music: Music;
@@ -11,15 +13,25 @@ interface PropMusicCard {
 }
 
 export const MusicCard: React.FC<PropMusicCard> = ({ music, bgColor }) => {
-  const [currSound, setCurrSound] = useAtom(currentSoundAtom);
   const [showPlay, setShowPlay] = useState<boolean>(false);
   const [isPlayed, setIsPlayed] = useState<boolean>(false);
   const timeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [currPlaylist, setCurrPalaylist] = useAtom(currentPlaylistAtom);
+
+  const getMusicPlaylist = useMutation(musicApi.getMusicId, {
+    onSuccess(data) {
+      console.log(data.data);
+      setCurrPalaylist(data.data);
+    },
+    onError(error) {
+      console.log(error);
+    },
+  });
 
   const onPlayClick = useCallback(() => {
     console.log("music played");
-    setCurrSound(music);
     setIsPlayed(true);
+    getMusicPlaylist.mutate({ id: music._id });
   }, []);
 
   const onPauseClick = useCallback(() => {

@@ -36,7 +36,27 @@ route.get("/", async (req, res) => {
   }
 });
 
-route.get("/:userId", async (req, res) => {
+route.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const baseMusic = await Music.findById(id);
+    const recommendations = await Music.aggregate([
+      { $match: { _id: { $ne: id } } },
+      { $sample: { size: 4 } },
+    ]);
+
+    res
+      .status(200)
+      .send({ message: "Success", data: [baseMusic, ...recommendations] });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Server error" });
+  }
+});
+
+// sounds of user
+route.get("/user/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
     console.log();

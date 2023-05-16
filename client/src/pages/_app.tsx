@@ -59,8 +59,6 @@ const AppInner = ({ Component, pageProps }: AppProps) => {
 };
 
 const App = (props: AppProps) => {
-  const [currentSound] = useAtom(currentSoundAtom);
-
   return (
     <>
       <AppWrapper>
@@ -68,7 +66,6 @@ const App = (props: AppProps) => {
         <div className="bg-gradient-to-r from-indigo-500 from-20% via-sky-500 via-50% to-emerald-500 to-90%">
           <AppInner {...props} />
         </div>
-        <Player sound={currentSound} />
       </AppWrapper>
     </>
   );

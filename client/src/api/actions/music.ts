@@ -4,12 +4,20 @@ import { baseResponse } from "../types/baseResponse";
 
 const baseRoutes = {
   get: "music/",
-  getUserMusic: (id: string) => `music/${id}`,
+  getById: (id: string) => `music/${id}`,
+  getUserMusic: (id: string) => `music/user/${id}`,
   upload: "music/",
 };
 
 const getMusic = async () => {
   const response = await client.get<baseResponse<Array<Music>>>(baseRoutes.get);
+  return response.data;
+};
+
+const getMusicId = async ({ id }: { id: string }) => {
+  const response = await client.get<baseResponse<Array<Music>>>(
+    baseRoutes.getById(id)
+  );
   return response.data;
 };
 
@@ -33,10 +41,11 @@ const uploadMusic = async (data: FormData) => {
   return response.data;
 };
 
-const music = {
+const musicApi = {
   getMusic,
+  getMusicId,
   getUserMusic,
   uploadMusic,
 };
 
-export default music;
+export default musicApi;
