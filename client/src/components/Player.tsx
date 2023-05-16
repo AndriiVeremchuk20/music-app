@@ -13,15 +13,18 @@ interface PropPlayer {
 }
 
 export const Player: React.FC<PropPlayer> = ({ sound }) => {
-  const [play, { stop, pause, duration }] = useSound(sound?.musicPath || "");
+  const [currSound] = useAtom(currentSoundAtom);
+  const [play, { stop, pause, duration }] = useSound(
+    currSound?.musicPath || ""
+  );
   const [isPaused, setIsPaused] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log(sound);
+    console.log(currSound);
     play();
     setIsPaused(false);
     return stop();
-  }, [sound]);
+  }, [currSound]);
 
   const onPauseClick = useCallback(() => {
     setIsPaused(true);

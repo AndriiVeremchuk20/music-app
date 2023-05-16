@@ -1,6 +1,7 @@
 import music from "@/api/actions/music";
-import { userAtom } from "@/atom";
+import { currentSoundAtom, userAtom } from "@/atom";
 import { Menu } from "@/components/Menu";
+import { MusicCard } from "@/components/MusicCard";
 import { MusicList } from "@/components/MusicList";
 import { Music } from "@/types/music";
 import { useMutation } from "@tanstack/react-query";
@@ -10,6 +11,7 @@ import React, { useEffect, useState } from "react";
 const Home: React.FC = () => {
   const [user] = useAtom(userAtom);
   const [musicList, setMusicList] = useState<Array<Music>>([]);
+  const [currSound] = useAtom(currentSoundAtom);
 
   const getMusicMutations = useMutation(music.getMusic, {
     onSuccess(data) {
@@ -30,7 +32,11 @@ const Home: React.FC = () => {
       <div className="ml-4 col-span-2">
         <MusicList musicList={musicList} />
       </div>
-      <div className="bg-slate-500 grid">lskfldsk</div>
+      <div className="bg-slate-500 grid">
+        {currSound ? (
+          <MusicCard music={currSound} bgColor="bg-red-500" />
+        ) : null}
+      </div>
     </div>
   );
 };

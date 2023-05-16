@@ -1,9 +1,9 @@
 import { currentSoundAtom } from "@/atom";
 import { Music } from "@/types/music";
-import Image from "next/image";
 import { useAtom } from "jotai";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FaPlay } from "react-icons/fa";
+import { AiFillPauseCircle } from "react-icons/ai";
 
 interface PropMusicCard {
   music: Music;
@@ -19,6 +19,11 @@ export const MusicCard: React.FC<PropMusicCard> = ({ music, bgColor }) => {
   const onPlayClick = useCallback(() => {
     console.log("music played");
     setCurrSound(music);
+    setIsPlayed(true);
+  }, []);
+
+  const onPauseClick = useCallback(() => {
+    setIsPlayed(false);
   }, []);
 
   const handleMouseHover = () => {
@@ -48,10 +53,17 @@ export const MusicCard: React.FC<PropMusicCard> = ({ music, bgColor }) => {
     >
       {showPlay ? (
         <div className="flex flex-col w-full h-full bg-neutral-900 bg-opacity-40 rounded-t-md">
-          <FaPlay
-            onClick={onPlayClick}
-            className="m-auto text-3xl fill-white cursor-pointer hover:scale-110"
-          />
+          {isPlayed ? (
+            <AiFillPauseCircle
+              className="m-auto text-3xl fill-white cursor-pointer hover:scale-110"
+              onClick={onPauseClick}
+            />
+          ) : (
+            <FaPlay
+              onClick={onPlayClick}
+              className="m-auto text-3xl fill-white cursor-pointer hover:scale-110"
+            />
+          )}
         </div>
       ) : null}
       <div
