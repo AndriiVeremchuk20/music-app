@@ -20,7 +20,6 @@ export const MusicCard: React.FC<PropMusicCard> = ({ music, bgColor }) => {
 
   const getMusicPlaylist = useMutation(musicApi.getMusicId, {
     onSuccess(data) {
-      console.log(data.data);
       setCurrPalaylist(data.data);
     },
     onError(error) {

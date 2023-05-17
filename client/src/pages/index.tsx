@@ -3,6 +3,7 @@ import { currentPlaylistAtom, userAtom } from "@/atom";
 import { Menu } from "@/components/Menu";
 import { MusicCard } from "@/components/MusicCard";
 import { MusicList } from "@/components/MusicList";
+import { Player } from "@/components/Player";
 import { Music } from "@/types/music";
 import { useMutation } from "@tanstack/react-query";
 import { useAtom } from "jotai";
@@ -32,9 +33,9 @@ const Home: React.FC = () => {
       <div className="ml-4 col-span-2">
         <MusicList musicList={musicList} />
       </div>
-      <div className="bg-slate-500 grid">
+      <div className="bg-slate-500 flex flex-col">
         {currentPlaylist.map((item) => (
-          <div key={item._id}>{item.title}</div>
+          <div className="my-10" key={item._id}>{item.title}</div>
         ))}
       </div>
     </div>
