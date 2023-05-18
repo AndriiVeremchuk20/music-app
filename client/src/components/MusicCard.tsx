@@ -13,10 +13,13 @@ interface PropMusicCard {
 }
 
 export const MusicCard: React.FC<PropMusicCard> = ({ music, bgColor }) => {
+  const [currSound] = useAtom(currentSoundAtom);
   const [showPlay, setShowPlay] = useState<boolean>(false);
-  const [isPlayed, setIsPlayed] = useState<boolean>(false);
+  const [isPlayed, setIsPlayed] = useState<boolean>(
+    currSound && currSound._id === music._id ? true : false
+  );
   const timeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [currPlaylist, setCurrPalaylist] = useAtom(currentPlaylistAtom);
+  const [, setCurrPalaylist] = useAtom(currentPlaylistAtom);
 
   const getMusicPlaylist = useMutation(musicApi.getMusicId, {
     onSuccess(data) {
@@ -53,6 +56,10 @@ export const MusicCard: React.FC<PropMusicCard> = ({ music, bgColor }) => {
     const timeoutId = setTimeout(() => setShowPlay(false), 100);
     timeout.current = timeoutId;
   };
+
+  useEffect(() => {
+    if (currSound) setIsPlayed(currSound._id === music._id);
+  }, [currSound]);
 
   return (
     <div

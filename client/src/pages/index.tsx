@@ -4,6 +4,7 @@ import { Menu } from "@/components/Menu";
 import { MusicCard } from "@/components/MusicCard";
 import { MusicList } from "@/components/MusicList";
 import { Player } from "@/components/Player";
+import { Playlist } from "@/components/Playlist";
 import { Music } from "@/types/music";
 import { useMutation } from "@tanstack/react-query";
 import { useAtom } from "jotai";
@@ -34,9 +35,7 @@ const Home: React.FC = () => {
         <MusicList musicList={musicList} />
       </div>
       <div className="bg-slate-500 flex flex-col">
-        {currentPlaylist.map((item) => (
-          <div className="my-10" key={item._id}>{item.title}</div>
-        ))}
+        <Playlist musicList={currentPlaylist} />
       </div>
     </div>
   );

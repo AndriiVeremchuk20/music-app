@@ -1,11 +1,22 @@
 import { Music } from "@/types/music";
-import React from "react";
-
+import React, { useEffect, useState } from "react";
+import { PlaylistItem } from "./PlaylistItem";
+import { Player } from "./Player";
+import { currentSoundAtom } from "@/atom";
+import { useAtom } from "jotai";
 
 interface PropPlaylist {
-  music: Array<Music>;
+  musicList: Array<Music>;
 }
 
-export const Playlist = () => {
-  return <div>Playlist</div>;
+export const Playlist: React.FC<PropPlaylist> = ({ musicList }) => {
+  const [currSound] = useAtom(currentSoundAtom);
+  return (
+    <div>
+      {currSound ? <Player sound={currSound} /> : null}
+      {musicList.map((item) => (
+        <PlaylistItem key={item._id} music={item} />
+      ))}
+    </div>
+  );
 };

@@ -9,39 +9,36 @@ import useSound from "use-sound";
 import { Music } from "@/types/music";
 
 interface PropPlayer {
-  sound: Music | null;
+  sound: Music;
 }
 
 export const Player: React.FC<PropPlayer> = ({ sound }) => {
-  const [currSound] = useAtom(currentSoundAtom);
-  const [play, { stop, pause, duration }] = useSound(
-    currSound?.musicPath || ""
-  );
+  const [play, { stop, pause, duration }] = useSound(sound.musicPath);
   const [isPaused, setIsPaused] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log(currSound);
     play();
     setIsPaused(false);
-    return stop();
-  }, [currSound]);
+    return () => stop();
+  }, [sound]);
 
   const onPauseClick = useCallback(() => {
     setIsPaused(true);
     pause();
-  }, []);
+  }, [sound]);
 
   const onPlayClick = useCallback(() => {
-    setIsPaused(true);
+    setIsPaused(false);
     play();
-  }, []);
+  }, [sound]);
 
   return (
-    <div className="fixed bottom-0 w-full bg-fuchsia-500 flex flex-col">
+    <div className="w-full bg-fuchsia-500 flex flex-col">
+      <div>{sound.title}</div>
       <div className="w-full flex pl-8 pr-6 py-2 mb-6">
         <input
           type="range"
-          className="w-full bg-green-700"
+          className="w-full"
           max={duration ? duration : 1}
           value={1}
         />
@@ -59,18 +56,3 @@ export const Player: React.FC<PropPlayer> = ({ sound }) => {
     </div>
   );
 };
-
-// const [isPaused, setIsPaused] = useState<boolean>(true);
-// //  const [currentSound, setCurrentSound] = useAtom(currentSoundAtom);
-// const [play, { pause, duration, sound }] = useSound(music.musicPath);
-
-// const onPlayClick = () => {
-//   //setCurrentSound(music);
-//   setIsPaused(false);
-//   play();
-// };
-
-// const onPauseClick = () => {
-//   setIsPaused(true);
-//   pause();
-// };
