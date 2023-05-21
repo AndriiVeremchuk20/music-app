@@ -41,13 +41,13 @@ export const Player: React.FC = () => {
     return (
       <div className="w-[500px] bg-neutral-100 p-5 border flex flex-col rounded">
         <Image
-        className="mx-auto my-6 rounded-md w-[400px] h-[400px]"
+          className="mx-auto my-6 rounded-md w-[400px] h-[400px]"
           src={currSound.posterPath}
           width={600}
           height={600}
           alt={currSound.title}
         />
-        <div>{currSound.title}</div>
+        <div className="text-xl">{currSound.title}</div>
         <div className="w-full flex pl-8 pr-6 py-2 mb-6">
           <input
             type="range"
