@@ -40,7 +40,6 @@ export const Player: React.FC<PropPlayer> = ({ sound }) => {
           type="range"
           className="w-full"
           max={duration ? duration : 1}
-          value={1}
         />
         <div className="px-3">{duration}</div>
       </div>

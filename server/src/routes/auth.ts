@@ -37,9 +37,7 @@ route.post("/google", async (req, res) => {
     const checkUser = await User.findOne({ uid: uid });
 
     if (checkUser) {
-      return res
-        .status(202)
-        .send({ message: "Auth successful", user: checkUser });
+      return res.status(202).send({ message: "Auth successful", uid: uid });
     }
 
     const newUser = await User.create({
@@ -50,7 +48,9 @@ route.post("/google", async (req, res) => {
       avatarPath: avatarUrl,
     });
 
-    res.status(204).send({ massage: "Registration successful", user: newUser });
+    res
+      .status(204)
+      .send({ massage: "Registration successful", uid: newUser.uid });
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: "Server error" });

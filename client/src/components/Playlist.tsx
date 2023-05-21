@@ -11,6 +11,7 @@ interface PropPlaylist {
 
 export const Playlist: React.FC<PropPlaylist> = ({ musicList }) => {
   const [currSound] = useAtom(currentSoundAtom);
+  
   return (
     <div>
       <Player sound={currSound} />

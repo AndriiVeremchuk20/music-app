@@ -21,7 +21,7 @@ const registration = async (data: RegistrationBody) => {
 };
 
 const authWithGoogle = async (data: RegistrationBody) => {
-  const response = await client.post<AuthResponse>(
+  const response = await client.post<RegistrationResponse>(
     baseRoutes.authWithGoogle,
     data
   );

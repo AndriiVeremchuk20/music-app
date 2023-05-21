@@ -34,9 +34,7 @@ const Home: React.FC = () => {
       <div className="ml-4 col-span-2">
         <MusicList musicList={musicList} />
       </div>
-      <div className="bg-slate-500 flex flex-col">
-        <Playlist musicList={currentPlaylist} />
-      </div>
+   
     </div>
   );
 };

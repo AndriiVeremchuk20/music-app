@@ -21,6 +21,15 @@ const SignInWithGoogleButton = () => {
   const registrationMutation = useMutation(userAuth.authWithGoogle, {
     onSuccess(data) {
       console.log(data);
+      router.replace(AppRoutes.home);
+    },
+    onError(error) {
+      console.log(error);
+    },
+  });
+
+  const authMutation = useMutation(userAuth.auth, {
+    onSuccess(data) {
       setUser(data.user);
       router.replace(AppRoutes.home);
     },
@@ -32,7 +41,7 @@ const SignInWithGoogleButton = () => {
   const handleSignInWithGoogle = async () => {
     await signInWithPopup(auth, googleAuthProvider)
       .then((credentials) => {
-        if (credentials.user.displayName || credentials.user.email)
+        if (credentials.user.displayName || credentials.user.email) {
           registrationMutation.mutate({
             uid: credentials.user.uid,
             firstName: credentials.user.displayName?.split(" ")[0] || "",
@@ -40,7 +49,9 @@ const SignInWithGoogleButton = () => {
             email: credentials.user.email || "",
             avatarUrl: credentials.user.photoURL,
           });
-        console.log(credentials);
+
+          authMutation.mutate({ type: "Auth", uid: credentials.user.uid });
+        }
       })
       .catch((e) => {
         console.log(e);
