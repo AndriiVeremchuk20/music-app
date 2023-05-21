@@ -10,24 +10,36 @@ import { useAtom } from "jotai";
 import { userAtom } from "@/atom";
 import { useMutation } from "@tanstack/react-query";
 import userAuth from "@/api/actions/userAuth";
+import { useRouter } from "next/router";
+import AppRoutes from "@/AppRoutes";
 
 const SignInWithGoogleButton = () => {
   const auth = getAuth();
   const [, setUser] = useAtom(userAtom);
+  const router = useRouter();
 
-  // const registrationMutation = useMutation(userAuth.registration, {
-  //   onSuccess(data) {
-  //     console.log(data);
-  //   },
-  //   onError(error) {
-  //     console.log(error);
-  //   },
-  // });
+  const registrationMutation = useMutation(userAuth.authWithGoogle, {
+    onSuccess(data) {
+      console.log(data);
+      setUser(data.user);
+      router.replace(AppRoutes.home);
+    },
+    onError(error) {
+      console.log(error);
+    },
+  });
 
-  const handleSignInWithGoogle = () => {
-    signInWithPopup(auth, googleAuthProvider)
+  const handleSignInWithGoogle = async () => {
+    await signInWithPopup(auth, googleAuthProvider)
       .then((credentials) => {
-        // setUser(credentials.user);
+        if (credentials.user.displayName || credentials.user.email)
+          registrationMutation.mutate({
+            uid: credentials.user.uid,
+            firstName: credentials.user.displayName?.split(" ")[0] || "",
+            lastName: credentials.user.displayName?.split(" ")[1] || "",
+            email: credentials.user.email || "",
+            avatarUrl: credentials.user.photoURL,
+          });
         console.log(credentials);
       })
       .catch((e) => {

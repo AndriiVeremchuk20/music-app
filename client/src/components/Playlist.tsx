@@ -13,7 +13,7 @@ export const Playlist: React.FC<PropPlaylist> = ({ musicList }) => {
   const [currSound] = useAtom(currentSoundAtom);
   return (
     <div>
-      {currSound ? <Player sound={currSound} /> : null}
+      <Player sound={currSound} />
       {musicList.map((item) => (
         <PlaylistItem key={item._id} music={item} />
       ))}

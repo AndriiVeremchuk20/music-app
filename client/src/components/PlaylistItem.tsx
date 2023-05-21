@@ -13,7 +13,7 @@ export const PlaylistItem: React.FC<PropPlaylistItem> = ({ music }) => {
 
   const onSoundClick = useCallback(() => {
     setSound(music);
-  }, []);
+  }, [music]);
 
   return (
     <div

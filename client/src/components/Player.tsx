@@ -9,11 +9,11 @@ import useSound from "use-sound";
 import { Music } from "@/types/music";
 
 interface PropPlayer {
-  sound: Music;
+  sound: Music | null;
 }
 
 export const Player: React.FC<PropPlayer> = ({ sound }) => {
-  const [play, { stop, pause, duration }] = useSound(sound.musicPath);
+  const [play, { stop, pause, duration }] = useSound(sound?.musicPath || "");
   const [isPaused, setIsPaused] = useState<boolean>(false);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export const Player: React.FC<PropPlayer> = ({ sound }) => {
 
   return (
     <div className="w-full bg-fuchsia-500 flex flex-col">
-      <div>{sound.title}</div>
+      <div>{sound?.title}</div>
       <div className="w-full flex pl-8 pr-6 py-2 mb-6">
         <input
           type="range"

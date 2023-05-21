@@ -7,6 +7,7 @@ import Link from "next/link";
 import AppRoutes from "@/AppRoutes";
 import { Logo } from "@/components/Logo";
 import { Menu } from "@/components/Menu";
+import Image from "next/image";
 
 export const Header = () => {
   const [user] = useAtom(userAtom);
@@ -28,11 +29,20 @@ export const Header = () => {
           <Logo />
           <div className="my-auto">Search bar</div>
 
-          <div className="my-6">
+          <div className="my-3">
             {user ? (
               <div className="flex" onClick={handleShowMenu}>
                 {user.avatarPath ? (
-                  <div>Avatar blt</div>
+                  <div className="flex">
+                    <div className="my-auto px-4">{user.firstName}</div>
+                    <Image
+                      src={user.avatarPath}
+                      className="w-16 h-16 rounded-full"
+                      width={200}
+                      height={200}
+                      alt="test"
+                    />
+                  </div>
                 ) : (
                   <>
                     <div className="my-auto px-4">{user.firstName}</div>

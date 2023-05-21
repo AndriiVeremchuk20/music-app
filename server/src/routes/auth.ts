@@ -29,11 +29,45 @@ route.post("/", async (req, res) => {
   }
 });
 
+route.post("/google", async (req, res) => {
+  try {
+    const { firstName, avatarUrl, lastName, email, uid } = req.body;
+    console.log(req.body);
+
+    const checkUser = await User.findOne({ uid: uid });
+
+    if (checkUser) {
+      return res
+        .status(202)
+        .send({ message: "Auth successful", user: checkUser });
+    }
+
+    const newUser = await User.create({
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      uid: uid,
+      avatarPath: avatarUrl,
+    });
+
+    res.status(204).send({ massage: "Registration successful", user: newUser });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Server error" });
+  }
+});
+
 //registration
 route.post("/registration", async (req, res) => {
   try {
-    const { firstName, lastName, email, password, uid } = req.body;
+    const { firstName, lastName, email, uid } = req.body;
     console.log(req.body);
+
+    const checkUser = await User.find({ uid: uid });
+
+    if (checkUser) {
+      return res.status(400).send({ message: "User alredy registred" });
+    }
 
     const newUser = await User.create({
       firstName: firstName,

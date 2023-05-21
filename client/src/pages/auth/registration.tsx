@@ -50,7 +50,13 @@ const Registration = () => {
       await createUserWithEmailAndPassword(auth, data.email, data.password)
         .then((credentials) => {
           console.log(credentials);
-          registrationMutation.mutate({ ...data, uid: credentials.user.uid });
+          registrationMutation.mutate({
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            uid: credentials.user.uid,
+            avatarUrl: null,
+          });
         })
         .catch((e) => console.log(e.message));
     }
@@ -65,11 +71,7 @@ const Registration = () => {
       <Head>
         <title>Registration</title>
       </Head>
-      <>
-        {
-          registrationMutation.isLoading?<Loader/>:null
-        }
-      </>
+      <>{registrationMutation.isLoading ? <Loader /> : null}</>
       <div className="w-full h-screen flex bg-gradient-to-r from-indigo-500 from-20% via-sky-500 via-50% to-emerald-500 to-90%">
         <div className="m-auto bg-white rounded-sm p-3">
           <form className="w-72 flex flex-col mb-5 m-3" onSubmit={onSubmit}>

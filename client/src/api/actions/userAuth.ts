@@ -8,12 +8,21 @@ import {
 
 const baseRoutes = {
   registration: "auth/registration",
+  authWithGoogle: "auth/google",
   auth: "auth/",
 };
 
 const registration = async (data: RegistrationBody) => {
   const response = await client.post<RegistrationResponse>(
     baseRoutes.registration,
+    data
+  );
+  return response.data;
+};
+
+const authWithGoogle = async (data: RegistrationBody) => {
+  const response = await client.post<AuthResponse>(
+    baseRoutes.authWithGoogle,
     data
   );
   return response.data;
@@ -27,6 +36,7 @@ const auth = async (data: AuthBody) => {
 
 const userAuth = {
   registration,
+  authWithGoogle,
   auth,
 };
 

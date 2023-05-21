@@ -12,7 +12,8 @@ const nextConfig = {
     API_BASE_URL: "http://localhost:9000/",
   },
   images: {
-    domains: ['music-app-media-data.s3.eu-north-1.amazonaws.com'],
+    domains: ['music-app-media-data.s3.eu-north-1.amazonaws.com', 'lh3.googleusercontent.com'],
+
   },
 }
 
