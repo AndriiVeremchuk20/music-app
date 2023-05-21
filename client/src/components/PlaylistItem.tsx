@@ -17,7 +17,7 @@ export const PlaylistItem: React.FC<PropPlaylistItem> = ({ music }) => {
 
   return (
     <div
-      className="flex border-b border-t py-3 px-6 hover:opacity-50"
+      className="flex border-b border-t py-3 px-6 cursor-pointer hover:opacity-50"
       onClick={onSoundClick}
     >
       <Image

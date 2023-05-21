@@ -1,5 +1,6 @@
 import musicApi from "@/api/actions/music";
 import { currentPlaylistAtom } from "@/atom";
+import { Player } from "@/components/Player";
 import { Playlist } from "@/components/Playlist";
 import { useMutation } from "@tanstack/react-query";
 import { useAtom } from "jotai";
@@ -29,8 +30,15 @@ const MusicPage = () => {
   }, [id]);
 
   return (
-    <div className="bg-slate-500 flex flex-col pt-[100px]">
-      <Playlist musicList={currentPlaylist} />
+    <div className="pt-[100px] min-h-screen max-h-fit">
+      <div className="flex">
+        <div className="mx-10">
+          <Player />
+        </div>
+        <div className="w-[500px]">
+          <Playlist musicList={currentPlaylist} />
+        </div>
+      </div>
     </div>
   );
 };

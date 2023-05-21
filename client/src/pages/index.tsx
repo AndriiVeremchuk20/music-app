@@ -30,7 +30,7 @@ const Home: React.FC = () => {
   }, [user]);
 
   return (
-    <div className="w-full min-h-screen max-h-auto pt-28 grid grid-cols-3">
+    <div className="w-full min-h-screen max-h-auto pt-28">
       <div className="ml-4 col-span-2">
         <MusicList musicList={musicList} />
       </div>
