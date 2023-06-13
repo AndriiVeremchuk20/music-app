@@ -1,5 +1,5 @@
 import musicApi from "@/api/actions/music";
-import { currentPlaylistAtom } from "@/atom";
+import { currentPlaylistAtom, currentSoundAtom } from "@/atom";
 import { Player } from "@/components/Player";
 import { Playlist } from "@/components/Playlist";
 import { useMutation } from "@tanstack/react-query";
@@ -10,6 +10,7 @@ import React, { useEffect } from "react";
 
 const MusicPage = () => {
   const [currentPlaylist, setCurrPalaylist] = useAtom(currentPlaylistAtom);
+  const [currentSound, setCurrentSound] = useAtom(currentSoundAtom);
 
   const router = useRouter();
   const { id } = router.query;
@@ -17,6 +18,7 @@ const MusicPage = () => {
   const getMusicPlaylistMutation = useMutation(musicApi.getMusicId, {
     onSuccess(data) {
       setCurrPalaylist(data.data);
+      setCurrentSound(data.data[0]);
     },
     onError(error) {
       console.log(error);

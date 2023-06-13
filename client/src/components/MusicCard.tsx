@@ -36,7 +36,7 @@ export const MusicCard: React.FC<PropMusicCard> = ({ music, bgColor }) => {
     if (timeout.current) {
       clearTimeout(timeout.current);
     }
-    const timeoutId = setTimeout(() => setShowPlay(true), 100);
+    const timeoutId = setTimeout(() => setShowPlay(true), 50);
     timeout.current = timeoutId;
   };
 
@@ -45,7 +45,7 @@ export const MusicCard: React.FC<PropMusicCard> = ({ music, bgColor }) => {
       clearTimeout(timeout.current);
       timeout.current = null;
     }
-    const timeoutId = setTimeout(() => setShowPlay(false), 100);
+    const timeoutId = setTimeout(() => setShowPlay(false), 50);
     timeout.current = timeoutId;
   };
 
