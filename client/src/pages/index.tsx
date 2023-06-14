@@ -1,5 +1,5 @@
 import musicApi from "@/api/actions/music";
-import { currentPlaylistAtom, userAtom } from "@/atom";
+import { currentPlaylistAtom, currentSoundAtom, userAtom } from "@/atom";
 import { Menu } from "@/components/Menu";
 import { MusicCard } from "@/components/MusicCard";
 import { MusicList } from "@/components/MusicList";
@@ -14,6 +14,8 @@ const Home: React.FC = () => {
   const [user] = useAtom(userAtom);
   const [musicList, setMusicList] = useState<Array<Music>>([]);
   const [currentPlaylist] = useAtom(currentPlaylistAtom);
+
+const [currSound] = useAtom(currentSoundAtom);
 
   const getMusicMutations = useMutation(musicApi.getMusic, {
     onSuccess(data) {
@@ -34,7 +36,7 @@ const Home: React.FC = () => {
       <div className="ml-4 col-span-2">
         <MusicList musicList={musicList} />
       </div>
-   
+   <Player/>
     </div>
   );
 };

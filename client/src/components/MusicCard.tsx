@@ -1,4 +1,4 @@
-import { currentSoundAtom } from "@/atom";
+import { currentPlaylistAtom, currentSoundAtom } from "@/atom";
 import { Music } from "@/types/music";
 import { useAtom } from "jotai";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -6,6 +6,8 @@ import { FaPlay } from "react-icons/fa";
 import { AiFillPauseCircle } from "react-icons/ai";
 import { useRouter } from "next/router";
 import AppRoutes from "@/AppRoutes";
+import { useMutation } from "@tanstack/react-query";
+import musicApi from "@/api/actions/music";
 
 interface PropMusicCard {
   music: Music;
@@ -13,19 +15,33 @@ interface PropMusicCard {
 }
 
 export const MusicCard: React.FC<PropMusicCard> = ({ music, bgColor }) => {
-  const [currSound] = useAtom(currentSoundAtom);
+  const [currSound, setCurrentSound] = useAtom(currentSoundAtom);
+  const [currentPlaylist, setCurrPalaylist] = useAtom(currentPlaylistAtom);
+
   const [showPlay, setShowPlay] = useState<boolean>(false);
   const [isPlayed, setIsPlayed] = useState<boolean>(
     currSound && currSound._id === music._id ? true : false
   );
   const timeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const router = useRouter();
+  //const router = useRouter();
+  
+  const getMusicPlaylistMutation = useMutation(musicApi.getMusicId, {
+    onSuccess(data) {
+      setCurrPalaylist(data.data);
+      setCurrentSound(data.data[0]);
+    },
+    onError(error) {
+      console.log(error);
+    },
+  });
+
 
   const onPlayClick = useCallback(() => {
     console.log("music played");
     setIsPlayed(true);
-    router.push(AppRoutes.music.idSound(music._id));
+	getMusicPlaylistMutation.mutate({id: music._id});
+//    router.push(AppRoutes.music.idSound(music._id));
   }, []);
 
   const onPauseClick = useCallback(() => {
