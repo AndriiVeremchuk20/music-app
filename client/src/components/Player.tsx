@@ -24,6 +24,7 @@ export const Player: React.FC = () => {
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [volume, setVolume] = useState<number>(100);
+  const [showPlaylist, setShowPlaylist] = useState<boolean>(false);
 
   const audioRef: MutableRefObject<HTMLAudioElement | null> = useRef(null);
 
@@ -55,23 +56,24 @@ export const Player: React.FC = () => {
   };
 
   const onVolumeUp = useCallback(() => {
-    if (volume < 100 && audioRef.current) {
+    if (volume <= 100 && audioRef.current) {
       setVolume((prev) => prev + volumeStep);
       audioRef.current.volume = volume / 100;
     }
-  }, [volume]);
+  }, [volume, setVolume]);
 
   const onVolumeDown = useCallback(() => {
-    if (volume > 0 && audioRef.current) {
+    if (volume >= 0 && audioRef.current) {
       setVolume((prev) => prev - volumeStep);
       audioRef.current.volume = volume / 100;
     }
-  }, [volume]);
+  }, [volume, setVolume]);
 
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.play();
-	  setIsPaused(false);
+      setIsPaused(false);
+	  audioRef.current.volume = volume/100;
     }
   }, [currSound]);
 
@@ -124,14 +126,14 @@ export const Player: React.FC = () => {
               </button>
             </div>
             <div className="flex items-center gap-2 mx-2">
-				<button onClick={onVolumeDown}>
-					<BsFillVolumeOffFill size={30}/>
-				</button>
-				<span>{volume}%</span>
-				<button onClick={onVolumeUp}>
-					<BsFillVolumeUpFill size={30}/>
-				</button>
-			</div>
+              <button onClick={onVolumeDown}>
+                <BsFillVolumeOffFill size={30} />
+              </button>
+              <span>{volume}%</span>
+              <button onClick={onVolumeUp}>
+                <BsFillVolumeUpFill size={30} />
+              </button>
+            </div>
           </div>
         </div>
 

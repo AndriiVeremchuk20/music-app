@@ -4,6 +4,7 @@ import { useAtom } from "jotai";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FaPlay } from "react-icons/fa";
 import { AiFillPauseCircle } from "react-icons/ai";
+import {GiSoundWaves} from "react-icons/gi";
 import { useRouter } from "next/router";
 import AppRoutes from "@/AppRoutes";
 import { useMutation } from "@tanstack/react-query";
@@ -38,7 +39,7 @@ export const MusicCard: React.FC<PropMusicCard> = ({ music, bgColor }) => {
 
 
   const onPlayClick = useCallback(() => {
-    console.log("music played");
+//    console.log("music played");
     setIsPlayed(true);
 	getMusicPlaylistMutation.mutate({id: music._id});
 //    router.push(AppRoutes.music.idSound(music._id));
@@ -77,12 +78,12 @@ export const MusicCard: React.FC<PropMusicCard> = ({ music, bgColor }) => {
       className={`w-48 h-48 flex flex-col rounded-md bg-center bg-cover bg-no-repeat shadow-xl shadow-black`}
       style={{ backgroundImage: `url(${music.posterPath})` }}
     >
-      {showPlay ? (
+      {showPlay || isPlayed ? (
         <div className="flex flex-col w-full h-full bg-neutral-900 bg-opacity-40 rounded-t-md">
           {isPlayed ? (
-            <AiFillPauseCircle
-              className="m-auto text-3xl fill-white cursor-pointer hover:scale-110"
-              onClick={onPauseClick}
+            <GiSoundWaves
+              className="m-auto fill-white cursor-pointer hover:scale-110 animate-pulse"
+              size={70}				
             />
           ) : (
             <FaPlay
