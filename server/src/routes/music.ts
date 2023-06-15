@@ -17,7 +17,7 @@ const upload = multer().fields([
 
 route.get("/", async (req, res) => {
   try {
-    let music = await Music.find({});
+    let music = await Music.find({}).sort({postedAt: -1});
 
     //  Promise.all(
     //   music.map(async (sound) => {

@@ -15,11 +15,15 @@ import { useAtom } from "jotai";
 import { currentSoundAtom } from "@/atom";
 import Image from "next/image";
 import { getSoundTime } from "@/utils/getSoundTime";
+import { BsFillVolumeOffFill, BsFillVolumeUpFill } from "react-icons/bs";
+
+const volumeStep = 10;
 
 export const Player: React.FC = () => {
   const [currSound] = useAtom(currentSoundAtom);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
+  const [volume, setVolume] = useState<number>(100);
 
   const audioRef: MutableRefObject<HTMLAudioElement | null> = useRef(null);
 
@@ -50,18 +54,33 @@ export const Player: React.FC = () => {
     setCurrentTime(e.target.currentTime);
   };
 
+  const onVolumeUp = useCallback(() => {
+    if (volume < 100 && audioRef.current) {
+      setVolume((prev) => prev + volumeStep);
+      audioRef.current.volume = volume / 100;
+    }
+  }, [volume]);
+
+  const onVolumeDown = useCallback(() => {
+    if (volume > 0 && audioRef.current) {
+      setVolume((prev) => prev - volumeStep);
+      audioRef.current.volume = volume / 100;
+    }
+  }, [volume]);
+
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.play();
+	  setIsPaused(false);
     }
   }, [currSound]);
 
   if (currSound) {
     return (
-      <div className="w-full h-fit fixed flex bg-blue-200 bg-opacity-70 bottom-0">
-        <div className="flex w-fit">
+      <div className="w-full h-fit fixed flex bg-blue-200 bg-opacity-70 bottom-0 px-4 py-2">
+        <div className="flex flex-col items-center w-fit mr-4">
           <Image
-            className={`w-[100px] h-[100px] rounded-full ${
+            className={`w-[90px] h-[90px] border border-black shadow-xl rounded-full ${
               isPaused ? "" : "animate-spin-slow"
             }`}
             width={100}
@@ -69,39 +88,50 @@ export const Player: React.FC = () => {
             alt={currSound.title}
             src={currSound.posterPath}
           />
-          <div>{currSound.title}</div>
+          <span className="text-sm">{currSound.title}</span>
         </div>
 
         <div className="w-full">
-          <div className="flex justify-between">
+          <div className="flex justify-between mb-5">
             <div>{getSoundTime(currentTime)}</div>
             <input
               type="range"
               max={audioRef.current?.duration}
               value={currentTime}
               onChange={onSetTime}
-              className="w-full"
+              className="w-full mx-1"
             />
             <div>{getSoundTime(audioRef.current?.duration)}</div>
           </div>
-          <div className="w-full flex justify-around">
-            <button>
-              <AiOutlineStepBackward size={32} />
-            </button>
-            <>
-              {isPaused ? (
-                <button onClick={onPlayClick}>
-                  <FiPlay size={32} />
-                </button>
-              ) : (
-                <button onClick={onPauseClick}>
-                  <AiFillPauseCircle size={32} />
-                </button>
-              )}
-            </>
-            <button>
-              <AiOutlineStepForward />
-            </button>
+          <div className="w-full flex justify-between">
+            <div className="w-full flex justify-around">
+              <button>
+                <AiOutlineStepBackward size={40} />
+              </button>
+              <>
+                {isPaused ? (
+                  <button onClick={onPlayClick}>
+                    <FiPlay size={32} />
+                  </button>
+                ) : (
+                  <button onClick={onPauseClick}>
+                    <AiFillPauseCircle size={40} />
+                  </button>
+                )}
+              </>
+              <button>
+                <AiOutlineStepForward size={40} />
+              </button>
+            </div>
+            <div className="flex items-center gap-2 mx-2">
+				<button onClick={onVolumeDown}>
+					<BsFillVolumeOffFill size={30}/>
+				</button>
+				<span>{volume}%</span>
+				<button onClick={onVolumeUp}>
+					<BsFillVolumeUpFill size={30}/>
+				</button>
+			</div>
           </div>
         </div>
 
