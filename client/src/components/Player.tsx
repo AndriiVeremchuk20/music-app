@@ -16,6 +16,8 @@ import { currentSoundAtom } from "@/atom";
 import Image from "next/image";
 import { getSoundTime } from "@/utils/getSoundTime";
 import { BsFillVolumeOffFill, BsFillVolumeUpFill } from "react-icons/bs";
+import {Playlist} from "./Playlist";
+import {RiPlayListFill} from "react-icons/ri";
 
 const volumeStep = 10;
 
@@ -134,6 +136,7 @@ export const Player: React.FC = () => {
                 <BsFillVolumeUpFill size={30} />
               </button>
             </div>
+			<RiPlayListFill className="mx-4 my-2 cursor-pointer" size={30}/>
           </div>
         </div>
 
@@ -144,6 +147,9 @@ export const Player: React.FC = () => {
           className="hidden"
           onTimeUpdate={onTimeUpdate}
         />
+		{
+			showPlaylist? <Playlist/> : null
+		}
       </div>
     );
   }
