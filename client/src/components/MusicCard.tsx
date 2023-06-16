@@ -4,11 +4,12 @@ import { useAtom } from "jotai";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FaPlay } from "react-icons/fa";
 import { AiFillPauseCircle } from "react-icons/ai";
-import {GiSoundWaves} from "react-icons/gi";
+import { GiSoundWaves } from "react-icons/gi";
 import { useRouter } from "next/router";
 import AppRoutes from "@/AppRoutes";
 import { useMutation } from "@tanstack/react-query";
 import musicApi from "@/api/actions/music";
+import { AnimationPlayed } from "./AnimationPlayed";
 
 interface PropMusicCard {
   music: Music;
@@ -26,7 +27,7 @@ export const MusicCard: React.FC<PropMusicCard> = ({ music, bgColor }) => {
   const timeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   //const router = useRouter();
-  
+
   const getMusicPlaylistMutation = useMutation(musicApi.getMusicId, {
     onSuccess(data) {
       setCurrPalaylist(data.data);
@@ -37,12 +38,11 @@ export const MusicCard: React.FC<PropMusicCard> = ({ music, bgColor }) => {
     },
   });
 
-
   const onPlayClick = useCallback(() => {
-//    console.log("music played");
+    //    console.log("music played");
     setIsPlayed(true);
-	getMusicPlaylistMutation.mutate({id: music._id});
-//    router.push(AppRoutes.music.idSound(music._id));
+    getMusicPlaylistMutation.mutate({ id: music._id });
+    //    router.push(AppRoutes.music.idSound(music._id));
   }, []);
 
   const onPauseClick = useCallback(() => {
@@ -81,10 +81,13 @@ export const MusicCard: React.FC<PropMusicCard> = ({ music, bgColor }) => {
       {showPlay || isPlayed ? (
         <div className="flex flex-col w-full h-full bg-neutral-900 bg-opacity-40 rounded-t-md">
           {isPlayed ? (
-            <GiSoundWaves
+            /* <GiSoundWaves
               className="m-auto fill-white cursor-pointer hover:scale-110 animate-pulse"
               size={70}				
-            />
+            />*/
+            <div className="m-auto fill-white cursor-pointer hover:scale-110">
+              <AnimationPlayed />
+            </div>
           ) : (
             <FaPlay
               onClick={onPlayClick}
