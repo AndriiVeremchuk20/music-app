@@ -57,18 +57,16 @@ export const Player: React.FC = () => {
   };
 
   const onVolumeUp = useCallback(() => {
-    if (volume <= 100 && audioRef.current) {
+    if (volume < 100 && audioRef.current) {
       setVolume((prev) => prev + volumeStep);
-      audioRef.current.volume = volume / 100;
     }
-  }, [volume, setVolume]);
+  }, [volume]);
 
   const onVolumeDown = useCallback(() => {
-    if (volume >= 0 && audioRef.current) {
+    if (volume > 0 && audioRef.current) {
       setVolume((prev) => prev - volumeStep);
-      audioRef.current.volume = volume / 100;
     }
-  }, [volume, setVolume]);
+  }, [volume]);
 
   const onShowPlaylistClick = useCallback(() => {
     setShowPlaylist((prev) => !prev);
@@ -81,6 +79,10 @@ export const Player: React.FC = () => {
       audioRef.current.volume = volume / 100;
     }
   }, [currSound]);
+
+  useEffect(() => {
+    if (audioRef.current) audioRef.current.volume = volume / 100;
+  }, [volume]);
 
   if (currSound) {
     return (
@@ -135,7 +137,7 @@ export const Player: React.FC = () => {
                 <button onClick={onVolumeDown}>
                   <BsFillVolumeOffFill size={30} />
                 </button>
-                <span>{volume}%</span>
+                <span className="w-10">{volume}%</span>
                 <button onClick={onVolumeUp}>
                   <BsFillVolumeUpFill size={30} />
                 </button>
