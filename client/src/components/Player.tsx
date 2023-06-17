@@ -11,7 +11,7 @@ import { FiPlay } from "react-icons/fi";
 import { AiOutlineStepBackward } from "react-icons/ai";
 import { AiOutlineStepForward } from "react-icons/ai";
 import { useAtom } from "jotai";
-import { currentSoundAtom } from "@/atom";
+import { currentPlaylistAtom, currentSoundAtom } from "@/atom";
 import Image from "next/image";
 import { getSoundTime } from "@/utils/getSoundTime";
 import { BsFillVolumeOffFill, BsFillVolumeUpFill } from "react-icons/bs";
@@ -21,7 +21,8 @@ import { RiPlayListFill } from "react-icons/ri";
 const volumeStep = 10;
 
 export const Player: React.FC = () => {
-  const [currSound] = useAtom(currentSoundAtom);
+  const [currSound, setCurrSound] = useAtom(currentSoundAtom);
+  const [currPlaylist] = useAtom(currentPlaylistAtom);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [volume, setVolume] = useState<number>(100);
@@ -29,6 +30,17 @@ export const Player: React.FC = () => {
 
   const audioRef: MutableRefObject<HTMLAudioElement | null> = useRef(null);
 
+/*  const mvNextSound = useCallback(() => {
+    const nextSound = currPlaylist.find((item, index) => {
+      if (item._id === currSound?._id && index !== currPlaylist.length - 1) {
+        return index;
+      }
+      return index;
+    });
+
+    setCurrSound(currPlaylist[nextSound]);
+  }, [currSound, currPlaylist]);
+*/
   const onPauseClick = useCallback(() => {
     if (audioRef.current) {
       audioRef.current.pause();
@@ -71,6 +83,10 @@ export const Player: React.FC = () => {
   const onShowPlaylistClick = useCallback(() => {
     setShowPlaylist((prev) => !prev);
   }, []);
+
+  const onAudiuEnd = useCallback(() => {
+    setIsPaused(true);
+  }, [currSound]);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -156,6 +172,7 @@ export const Player: React.FC = () => {
             src={currSound.musicPath}
             className="hidden"
             onTimeUpdate={onTimeUpdate}
+            onEnded={onAudiuEnd}
           />
         </div>
         {showPlaylist ? <Playlist /> : null}

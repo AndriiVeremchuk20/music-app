@@ -8,6 +8,7 @@ import AppRoutes from "@/AppRoutes";
 import { Logo } from "@/components/Logo";
 import { Menu } from "@/components/Menu";
 import Image from "next/image";
+import {BiSearch} from "react-icons/bi";
 
 export const Header = () => {
   const [user] = useAtom(userAtom);
@@ -25,11 +26,15 @@ export const Header = () => {
     <>
       <Menu hide={handleHideMenu} show={showMenu} />
       <div className="w-full h-24 px-4 bg-neutral-600 bg-opacity-80 fixed border-b">
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
           <Logo />
-          <div className="my-auto">Search bar</div>
-
-          <div className="my-3">
+          <div className="">
+			<label className="flex gap-1 border-black border-b">
+				<input type="text" className="w-96 outline-none text-xl px-2 py-1 bg-inherit" placeholder="Search..."/>
+				<button><BiSearch  className="" size={32}/></button>
+			</label>
+		  </div>
+          <div className="">
             {user ? (
               <div className="flex" onClick={handleShowMenu}>
                 {user.avatarPath ? (
@@ -45,7 +50,7 @@ export const Header = () => {
                   </div>
                 ) : (
                   <>
-                    <div className="my-auto px-4">{user.firstName}</div>
+                    <div className=" px-4">{user.firstName}</div>
                     <FaUserCircle className="text-5xl" />
                   </>
                 )}
