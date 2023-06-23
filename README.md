@@ -13,7 +13,7 @@ App to listen and upload your music.
 
 
 
-## Dependensies:
+## Dependencies:
 [Next.js](https://nextjs.org/)
 
 [Express.js](https://expressjs.com/)
